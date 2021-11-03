@@ -178,7 +178,7 @@ async function componentProccessor(componentJSON: any): Promise<Component|undefi
     let component;
     if (componentJSON['type'] === 'Script') {
         // deal with scripts separately
-        return await dealWithScriptComponent(componentJSON);
+        return dealWithScriptComponent(componentJSON);
     }
 
     // dynamically generate component from class

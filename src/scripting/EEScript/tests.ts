@@ -229,14 +229,14 @@ expect([1], '// hiii \n 1');
 // functions
 expect(['N_function', 1], `
 var myFunc = func () {
-    return 1; 
+    return 1;
 };
 myFunc();
 `);
 // callbacks
 expect(['N_function', 1], `
 var myFunc = func (cb) {
-    return cb(); 
+    return cb();
 };
 myFunc(func () {
     return 1;
@@ -261,8 +261,8 @@ var myFunc = func (n, cb) {
     }
     return n;
 };
-myFunc(20, func (n) { 
-    return n < 5; 
+myFunc(20, func (n) {
+    return n < 5;
 });
 `);
 expect(['N_function', 0], `
@@ -281,7 +281,7 @@ var myFunc = func (arr, cb) {
         }
     }
 };
-myFunc([0, 1, 2, 3], func (n) { 
+myFunc([0, 1, 2, 3], func (n) {
     return n == 3;
 });
 `);

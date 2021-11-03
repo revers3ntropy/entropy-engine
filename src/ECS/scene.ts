@@ -113,7 +113,7 @@ export class Scene {
             return;
         }
         console.error(`
-            No sprites with component of type 'camera' can be found. 
+            No sprites with component of type 'camera' can be found.
             Make sure that there is at least one sprite in the scene '${Scene.activeScene.name}' with a 'Camera' component attached
         `);
     }
@@ -160,7 +160,7 @@ export class Scene {
 
     static get activeScene (): Scene {
         if (this.scenes.length < 1)
-            throw 'No scenes found';
+            throw new Error('No scenes found');
         
         return Scene.sceneByID(Scene.active);
     }
