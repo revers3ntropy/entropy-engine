@@ -1,5 +1,5 @@
 "use strict";
-; /*
+ /*
 import {Entity} from "../ECS/entity.js";
 import { Script } from '../components/scriptComponent.js';
 import { Transform } from '../index.js';

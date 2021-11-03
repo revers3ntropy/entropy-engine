@@ -21,7 +21,7 @@ export function initialise (globalContext: Context, printFunc: (...args: any[]) 
 
         result = await fetch(url);
         let newContext = new Context(nameFromScriptURL(url));
-        return await run(await result.text(), {
+        return run(await result.text(), {
             env: newContext
         });
     }

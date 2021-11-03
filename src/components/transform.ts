@@ -28,7 +28,7 @@ export class Transform extends Component {
             value: position,
             type: 'v3',
             overrideGet: () => {
-                if (typeof this.parent === 'number') 
+                if (typeof this.parent === 'number')
                     return this.getPublic('position');
                 
                 return this.getPublic('position').clone.add(this.parent.position);

@@ -23,7 +23,7 @@ Systems.systems.push({
             });
 
             if (!(thisComponent instanceof Script))
-                throw `Cannot find self on script with name ${script.script.name}!`;
+                throw new Error(`Cannot find self on script with name ${script.script.name}!`);
 
             script.script.component = thisComponent;
 

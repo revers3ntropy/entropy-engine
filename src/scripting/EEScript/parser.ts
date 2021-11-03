@@ -353,7 +353,7 @@ export class Parser {
                 return res.failure(new InvalidSyntaxError(
                     startPos,
                     this.currentToken.endPos,
-                    `Cannot have node of type ${this.currentToken.constructor.name}. 
+                    `Cannot have node of type ${this.currentToken.constructor.name}.
                             Expected either index or variable node.`
                 ))
             }
@@ -884,7 +884,7 @@ export class Parser {
         const res = new ParseResults();
         const startPos = this.currentToken.startPos;
         const methods: N_function[] = [];
-        let init: N_function | undefined = undefined;
+        let init: N_function | undefined;
         let extends_: Node | undefined;
 
         if (!this.currentToken.matches(tt.KEYWORD, 'class'))

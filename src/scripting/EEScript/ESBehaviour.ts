@@ -29,7 +29,7 @@ export class N_ESBehaviour extends Node {
     }
 
     interpret_(context: Context) {
-        let entity: any = undefined;
+        let entity: any;
         if (this.entityNode) {
             let res = this.entityNode.interpret(context);
             if (res.error) return res;
