@@ -3,16 +3,16 @@
  */
 import {v2} from "./v2";
 
-export * from './matrix.js';
+export * from './matrix';
 
-export * from './v2.js';
-export * from './v3.js';
+export * from './v2';
+export * from './v3';
 
-export * from './meshV2.js';
-export * from './meshV3.js';
+export * from './meshV2';
+export * from './meshV3';
 
-export * from './triangleV2.js';
-export * from './triangleV3.js';
+export * from './triangleV2';
+export * from './triangleV3';
 
 /**
  * Calculates if the point is in a polygon described by moving through each point in the array passed in

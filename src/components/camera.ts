@@ -1,7 +1,7 @@
-import {Component} from "../ECS/component.js";
-import {v2, v3} from "../maths/maths.js";
-import {getCanvasSize, getZoomScaledPosition, JSONifyComponent} from "../util/general.js";
-import {Entity} from "../ECS/entity.js";
+import {Component} from "../ECS/component";
+import {v2, v3} from "../maths/maths";
+import {getCanvasSize, getZoomScaledPosition, JSONifyComponent} from "../util/general";
+import {Entity} from "../ECS/entity";
 
 export class Camera extends Component {
     // @ts-ignore

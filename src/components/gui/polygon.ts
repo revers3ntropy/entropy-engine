@@ -1,9 +1,9 @@
-import {rgb} from "../../util/colour.js";
-import {Transform} from "../transform.js";
-import {polygon} from "../../systems/rendering/basicShapes.js";
-import {scaleMeshV2} from "../../util/general.js";
-import {polygonCollidingWithPoint, v2} from "../../maths/maths.js";
-import {GUIElement} from "./gui.js";
+import {rgb} from "../../util/colour";
+import {Transform} from "../transform";
+import {polygon} from "../../systems/rendering/basicShapes";
+import {scaleMeshV2} from "../../util/general";
+import {polygonCollidingWithPoint, v2} from "../../maths/maths";
+import {GUIElement} from "./gui";
 
 export class GUIPolygon extends GUIElement {
     // @ts-ignore

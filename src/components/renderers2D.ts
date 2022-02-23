@@ -1,9 +1,9 @@
-import {v2} from "../maths/maths.js";
-import {circle, image, rect} from "../systems/rendering/basicShapes.js";
-import {getZoomScaledPosition, JSONifyComponent} from '../util/general.js'
-import {colour, rgb, rgba} from "../util/colour.js";
-import { Transform } from "./transform.js";
-import { Renderer } from "./renderer.js";
+import {v2} from "../maths/maths";
+import {circle, image, rect} from "../systems/rendering/basicShapes";
+import {getZoomScaledPosition, JSONifyComponent} from '../util/general'
+import {colour, rgb, rgba} from "../util/colour";
+import { Transform } from "./transform";
+import { Renderer } from "./renderer";
 
 export abstract class Renderer2D extends Renderer {
     abstract draw (arg: {position: v2, transform: Transform, ctx: CanvasRenderingContext2D, zoom: number, center: v2}): void;

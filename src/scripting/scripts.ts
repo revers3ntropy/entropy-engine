@@ -1,116 +1,48 @@
-;/*
-import {Entity} from "../ECS/entity.js";
-import { Script } from '../components/scriptComponent.js';
-import { Transform } from '../index.js';
-import {publicField, publicFieldConfig} from "../publicField.js";
-export abstract class JSBehaviour {
-    name: string | undefined;
-    entity: Entity | undefined;
-    transform: Transform | undefined;
-    component: Script | undefined;
-    started: boolean;
 
-    tempPublic: publicField<any>[];
+/*
+import { CircleCollider, RectCollider } from "../components/colliders.js";
+import { Script } from "../components/scriptComponent.js";
+import { TriangleV2 } from "../maths/triangleV2.js";
+import { TriangleV3 } from "../maths/triangleV3.js";
+import { MeshV2 } from "../maths/meshV2.js";
+import { MeshV3 } from "../maths/meshV3.js";
+import { Body } from "../components/body.js";
+import { CircleRenderer, ImageRenderer2D, RectRenderer } from "../components/renderers2D.js";
+import { MeshRenderer } from "../components/renderers3D.js";
+import { GUIBox } from "../components/gui/box.js";
+import { GUIText } from "../components/gui/text.js";
+import { GUITextBox } from "../components/gui/textbox.js";
+import { GUIRect } from "../components/gui/rect.js";
+import { GUICircle } from "../components/gui/circle.js";
+import { GUIPolygon } from "../components/gui/polygon.js";
+import { GUIImage } from "../components/gui/image.js";
+import { Camera } from "../components/camera.js";
+import { Transform } from "../components/transform.js";
 
-    get public (): publicField<any>[] {
-        return this?.component?.public || [];
-    }
-    
-    // these are not used internally, but by the user when creating scripts
-    public addPublic<T>(config: publicFieldConfig<T>) {
-        if (!config.name) {
-            console.error(`Public fields must have 'name' property`);
-            return;
-        }
+globalConstants['CircleCollider'] = CircleCollider;
+globalConstants['RectCollider'] = RectCollider;
+globalConstants['Script'] = Script;
+globalConstants['TriangleV2'] = TriangleV2;
+globalConstants['TriangleV3'] = TriangleV3;
+globalConstants['MeshV2'] = MeshV2;
+globalConstants['MeshV3'] = MeshV3;
+globalConstants['Body'] = Body;
+globalConstants['CircleRenderer'] = CircleRenderer;
+globalConstants['RectRenderer'] = RectRenderer;
+globalConstants['ImageRenderer2D'] = ImageRenderer2D;
+globalConstants['MeshRenderer'] = MeshRenderer;
+globalConstants['GUIBox'] = GUIBox;
+globalConstants['GUIText'] = GUIText;
+globalConstants['GUITextBox'] = GUITextBox;
+globalConstants['GUIRect'] = GUIRect;
+globalConstants['GUICircle'] = GUICircle;
+globalConstants['GUIPolygon'] = GUIPolygon;
+globalConstants['GUIImage'] = GUIImage;
+globalConstants['Camera'] = Camera;
+globalConstants['Transform'] = Transform;
 
-        if (this.hasPublic(config.name)){
-            console.error('Cannot add property with existing name: ' + config.name);
-            return;
-        }
+ */
 
-        // @ts-ignore - doesn't like comparison to string
-        if (config.value === undefined && config.default === undefined) {
-            console.error(`Public fields must have 'value' property`);
-            return;
-        }
+export function init () {
 
-        // @ts-ignore - doesn't like comparison to string
-        if (config.value === undefined)
-            config.value = config.default;
-
-        const field = new publicField(config);
-        this.tempPublic.push(field);
-
-        Object.defineProperty(this, config.name, {
-            // so you can loop over it
-            enumerable: true,
-
-            get () {
-                if (config.overrideGet === undefined)
-                    return this.getPublic(config.name)
-
-                return config.overrideGet();
-            },
-            set (value) {
-                if (config.overrideSet === undefined) {
-                    this.setPublic(config.name, value);
-                    return;
-                }
-
-                config.overrideSet(value);
-            }
-        });
-
-        return field;
-    }
-
-    public getPublic (name: string) {
-        if (this.started)
-            return this.component?.getPublic(name);
-
-        for (let field of this.tempPublic) {
-            if (field.name === name) {
-                return field.value;
-            }
-        }
-    }
-
-    public setPublic (name: string, value: any) {
-        if (this.started)
-            return this.component?.setPublic(name, value);
-
-        for (let field of this.tempPublic) {
-            if (field.name === name) {
-                field.value = value;
-            }
-        }
-    }
-
-    public hasPublic (name: string): boolean {
-        if (this.started)
-            return !!this.component?.hasPublic(name);
-
-
-        for (let field of this.public) {
-            if (field.name === name) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    protected constructor() {
-        this.tempPublic = [];
-        this.started = false;
-    }
-
-    // Magic Methods
-    abstract Start: () => void;
-    abstract Update: () => void;
-    abstract onCollision: (collisionWith: Entity) => void;
-    abstract onMouseDown: () => void;
-    abstract onMouseUp: () => void;
-    abstract onClick: () => void;
 }
- //*/

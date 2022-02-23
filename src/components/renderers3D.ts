@@ -1,9 +1,8 @@
-import {Transform} from "./transform.js";
-import {Renderer} from "./renderer.js";
-import {MeshV3} from '../maths/maths.js';
-import {Entity} from "../ECS/entity.js";
-import {drawMesh, renderMode} from "../systems/rendering/3d/renderMesh.js";
-import {MeshArr} from "../maths/maths.js";
+import {Transform} from "./transform";
+import {Renderer} from "./renderer";
+import {MeshV3} from '../maths/maths';
+import {Entity} from "../ECS/entity";
+import {MeshArr} from "../maths/maths";
 
 export abstract class Renderer3D extends Renderer {
     abstract draw (arg: {
@@ -60,8 +59,8 @@ export class MeshRenderer extends Renderer3D {
         transform: Transform,
         ctx: CanvasRenderingContext2D,
         cameraSprite: Entity
-    }): void {
-        drawMesh(this.mesh, renderMode.WIREFRAME, arg.ctx, arg.cameraSprite, arg.transform);
+    }) {
+        //drawMesh(this.mesh, renderMode.WIREFRAME, arg.ctx, arg.cameraSprite, arg.transform);
     }
 
     json () {

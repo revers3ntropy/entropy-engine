@@ -1,40 +1,32 @@
-# Game engine for the HTML canvas
+# TypeScript Game Engine for the HTML5 canvas
 
-To get the engine, download the files directly from Github 
-and put them into your project.
+To use the engine  run `npm i entropy-engine`, or download the source files.
 
-(Or if you want to use the latest 
-experimental version, reference `https://revers3nropy.com/ess/entropy-engine-jc/` 
-when importing the engine, and use absolute paths to everything (Not recommended)).
+# Boilerplate:
 
-## Boilerplate:
-.html file:
-
+### index.html file:
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>title</title>
-
-    <script src="./path/to/entropy/engine/index.js" type="module"></script>
-
-    <script src="index.js" type="module"></script>
+    
+    <script src="./path/to/entropy-engine/build/$name$.js"></script>
+    
+    <script>
+        ee.runFromJSON('./index.json');
+    </script>
 </head>
 
 <body>
-<canvas id="myCanvas"></canvas>
+    <canvas id="myCanvas"></canvas>
 </body>
 </html>
 ```
+ Where `$name$` is 'stable', 'latest' or a version number (e.g. '0.0.0').
 
-index.js file:
-```js
-import { runFromJSON } from "./path/to/entropy/engine/entropy-engine-jc";
-runFromJSON('./path/from/entropy/engine/index.json');
-```
-
-index.json file:
+### index.json file:
 ```json
 {
   "canvasID": "myCanvas",
@@ -313,31 +305,31 @@ parent: Transform // not needed if you want it to be a root
 ###Properties
 `*` setting sets local position, getting gets world position
 
-| property            | description
-|---                  |---
-| position            | *  |
-| localPosition       | the position relative to direct parent
-| rotation            |  *
-| localRotation       | the rotation relative to direct parent     
-| scale               | *
-| localScale          | scale relative to direct parent
-| entity              | the entity this Transform is attached to
-| root                | the root parent of this transform - returns itself if it is root
-| forwards            | a unit v2 in the direction this is pointing in in world space
-| right               | a unit vector 90 degrees clockwise from forwards
+| property      | description                                                      |
+|---------------|------------------------------------------------------------------|
+| position      | *                                                                |
+| localPosition | the position relative to direct parent                           |
+| rotation      | *                                                                |
+| localRotation | the rotation relative to direct parent                           |
+| scale         | *                                                                |
+| localScale    | scale relative to direct parent                                  |
+| entity        | the entity this Transform is attached to                         |
+| root          | the root parent of this transform - returns itself if it is root |
+| forwards      | a unit v2 in the direction this is pointing in in world space    |
+| right         | a unit vector 90 degrees clockwise from forwards                 |
 
-| Methods             |  Arguments   | description
-|---                  |---           |---
-| detachParent        |              | makes this Transform a root
-| detachChildren      |              | makes all direct children roots
-| getChildren         |              | returns an array of all child Transform's Sprites
-| getChildCount       |              | returns the number of direct children this has
-| makeChildOf         | t: Transform | sets this parent to passed transform
-| makeChildOfFromName | name: string | sets this parent to transform associated with first Entity with passed name
-| makeParentOf        | transforms: Transform[] | sets parent of all passed Transforms to this
-| isRoot              |              | true is this.parent is undefined
-| isChild             |              | true is this.parent is not undefined
-| getChild            | name: string | gets a child whose entity's name matches passed
+| Methods             | Arguments               | description                                                                 |
+|---------------------|-------------------------|-----------------------------------------------------------------------------|
+| detachParent        |                         | makes this Transform a root                                                 |
+| detachChildren      |                         | makes all direct children roots                                             |
+| getChildren         |                         | returns an array of all child Transform's Sprites                           |
+| getChildCount       |                         | returns the number of direct children this has                              |
+| makeChildOf         | t: Transform            | sets this parent to passed transform                                        |
+| makeChildOfFromName | name: string            | sets this parent to transform associated with first Entity with passed name |
+| makeParentOf        | transforms: Transform[] | sets parent of all passed Transforms to this                                |
+| isRoot              |                         | true is this.parent is undefined                                            |
+| isChild             |                         | true is this.parent is not undefined                                        |
+| getChild            | name: string            | gets a child whose entity's name matches passed                             |
 
 No static methods
 
@@ -357,16 +349,16 @@ material: PhysicsMaterial
 
 ### Properties
 
-| property            | description
-|---                  |---
-| velocity            | speed and direction in the form of a v2  |
-| mass                | affects things like collisions and in some cases gravity
-| gravityAttract      | which direction it should do gravity to. THe greater the magnitude of the vector, the stronger the gravity
-| material            | a physics material (see below)
+| property       | description                                                                                                |
+|----------------|------------------------------------------------------------------------------------------------------------|
+| velocity       | speed and direction in the form of a v2                                                                    |
+| mass           | affects things like collisions and in some cases gravity                                                   |
+| gravityAttract | which direction it should do gravity to. THe greater the magnitude of the vector, the stronger the gravity |
+| material       | a physics material (see below)                                                                             |
 
-| Methods             |  Arguments   | description
-|---                  |---           |---
-| applyForce          | force: v2    | pushes the object based off the vector passed and mass
+| Methods    | Arguments | description                                            |
+|------------|-----------|--------------------------------------------------------|
+| applyForce | force: v2 | pushes the object based off the vector passed and mass |
 
 No static methods
 
@@ -386,11 +378,11 @@ and are dependent on the main camera, the entities `Body` component and this com
 
 ### Properties
 
-| property            | description
-|---                  |---
-| dimensions          | either width and height or radius, specific to subtype  |
-| offset              | offsets the renderer from the transform
-| zLayer              | layer of the components, determines what renders on top of what
+| property   | description                                                     |
+|------------|-----------------------------------------------------------------|
+| dimensions | either width and height or radius, specific to subtype          |
+| offset     | offsets the renderer from the transform                         |
+| zLayer     | layer of the components, determines what renders on top of what |
 
 No methods
 
@@ -429,15 +421,15 @@ Every collider has a `overlapsPoint` function, which takes in a point (`v2`)
 
 ### Properties
 
-| property            | description
-|---                  |---
-| dimensions          | either width and height or radius, specific to subtype  |
-| offset              | offsets the renderer from the transform
-| solid               | if set to false, then it doesn't update or collide with anything
+| property   | description                                                      |
+|------------|------------------------------------------------------------------|
+| dimensions | either width and height or radius, specific to subtype           |
+| offset     | offsets the renderer from the transform                          |
+| solid      | if set to false, then it doesn't update or collide with anything |
 
-| Methods             |  Arguments   | description
-|---                  |---           |---
-| overlapsPoint       | transform: Transform, p: v2    | returns whether or not the point collides with the collider given the transform
+| Methods       | Arguments                   | description                                                                     |
+|---------------|-----------------------------|---------------------------------------------------------------------------------|
+| overlapsPoint | transform: Transform, p: v2 | returns whether or not the point collides with the collider given the transform |
 
 No static methods
 
@@ -470,13 +462,13 @@ script: JSBehaviour
 profile: boolean
 ```
 
-| property            | description
-|---                  |---
-| profile             | whether or not to profile the scripts  |
+| property | description                           |
+|----------|---------------------------------------|
+| profile  | whether or not to profile the scripts |
 
-| Methods             |  Arguments   | description
-|---                  |---           |---
-| runMethod           | name: string, args: any[] | Tries to run the method on the script. Will be profiled like magic methods.
+| Methods   | Arguments                 | description                                                                 |
+|-----------|---------------------------|-----------------------------------------------------------------------------|
+| runMethod | name: string, args: any[] | Tries to run the method on the script. Will be profiled like magic methods. |
 
 No static methods
 
@@ -497,15 +489,14 @@ The camera component takes in an object with the following properties:
 zoom: number
 ```
 
-| property            | description
-|---                  |---
-| zoom                | how zoomed the field of view is  |
-| [static] main       | the entity with the Camera component currently in use  |
+| property      | description                                           |
+|---------------|-------------------------------------------------------|
+| zoom          | how zoomed the field of view is                       |
+| [static] main | the entity with the Camera component currently in use |
 
-| Static Methods     |  Arguments   | description
-|---              |---           |---
-| shake           | amount: number, durationMS: number | shakes the main camera round by changing its position and zoom slightly for specified amount of time (in ms)
-
+| Static Methods | Arguments                          | description                                                                                                  |
+|----------------|------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| shake          | amount: number, durationMS: number | shakes the main camera round by changing its position and zoom slightly for specified amount of time (in ms) |
 
 On this component, the `scaleBy` method will change the zoom by the value passed in as the `x`.
 To reset the main camera, call `Camera.findMain()`.
@@ -574,12 +565,11 @@ input.Down
 ## this
 Some properties are added to `this` on construction:
 
-| property   | description
-|---         |---
-| name       |  the name of the entity the script is attached to
-| entity     | the entity the script is attached to
-| transform  | the transform attached to `this.entity`
-
+| property  | description                                      |
+|-----------|--------------------------------------------------|
+| name      | the name of the entity the script is attached to |
+| entity    | the entity the script is attached to             |
+| transform | the transform attached to `this.entity`          |
 
 ## Tips
 

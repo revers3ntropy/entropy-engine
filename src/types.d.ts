@@ -1,22 +1,6 @@
-interface Number {
-    /**
-     * Returns a number whose value is limited to the given range.
-     *
-     * Example: limit the output of this computation to between 0 and 255
-     * (x * 255).clamp(0, 255)
-     *
-     * keep as function over arrow function due to use of 'this'
-     *
-     * @param {Number} min The lower boundary of the output range
-     * @param {Number} max The upper boundary of the output range
-     * @returns A number in the range [min, max]
-     * @type Number
-     */
-    clamp: (min: number, max: number) => number
-}
 
 // Matter defintions
-declare namespace Matter {
+declare module 'matter-js/build/matter' {
     /**
      * Installs the given plugins on the `Matter` namespace.
      * This is a short-hand for `Plugin.use`, see it for more information.

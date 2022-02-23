@@ -1,6 +1,6 @@
-import {getCanvasSize, getCanvasStuff, sleep} from "../../util/general.js";
-import {rect, text} from "./basicShapes.js";
-import {v2} from "../../maths/maths.js";
+import {getCanvasSize, getCanvasStuff, sleep} from "../../util/general";
+import {rect, text} from "./basicShapes";
+import {v2} from "../../maths/maths";
 
 export async function startAnimation(canvasID: string) {
     const {canvas, ctx} = getCanvasStuff(canvasID);

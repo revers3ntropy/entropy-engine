@@ -1,4 +1,4 @@
-import {v2} from "./v2.js";
+import {v2} from "./v2";
 
 export class v3 {
     x: number;

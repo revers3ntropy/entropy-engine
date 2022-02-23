@@ -1,9 +1,8 @@
-﻿import { Component } from './component.js'
-import { Body} from "../components/body.js"
-import {Script} from "../components/scriptComponent.js"
-import {getEntityFromJSON, setParentFromInfo} from "../JSONprocessor.js";
-import { Transform } from '../components/transform.js';
-import {ESBehaviourInstance} from "../scripting/EEScript/ESBehaviour.js";
+﻿import { Component } from './component'
+import { Body} from "../components/body"
+import {Script} from "../components/scriptComponent"
+import {getEntityFromJSON, setParentFromInfo} from "../JSONprocessor";
+import { Transform } from '../components/transform';
 
 export type entityConfig = {
     name: string
@@ -31,13 +30,15 @@ export class Entity {
         this.id = this.generateID();
     }
 
-    getComponent = <Type extends Component> (type: string, subType = ''): Type => {
+    getComponent = <T extends Component> (type: string, subType = ''): T => {
 
-        if (!(this instanceof Entity))
+        if (!(this instanceof Entity)) {
             throw new Error(`Running getComponent method in invalid context. this: ${this}`);
+        }
 
-        if (type.toLowerCase() === 'transform')
-            return this.transform as unknown as Type;
+        if (type.toLowerCase() === 'transform') {
+            return this.transform as unknown as T;
+        }
 
         // returns the first component of passed type
         let component: any = this.components.find(c => (
@@ -51,10 +52,11 @@ export class Entity {
                 c.subtype === subType || c.subtype === type
             )
 
-        if (component === undefined)
+        if (component === undefined) {
             throw new Error(`Cannot find component of type ${type} on entity ${this.name}`);
+        }
 
-        return component as Type;
+        return component as T;
     };
 
     getSceneID = () => this.sceneID;
@@ -65,18 +67,21 @@ export class Entity {
         return entity;
     };
 
-    addComponent = (toAdd: Component | ESBehaviourInstance) => {
+    addComponent = (toAdd: Component ) => {
         /*
             Checks if the component is viable on the entity, and if it is not,
             then refuses to add it or overrides the problematic component.
             For example, if you try to add a rectRenderer while a CircleRenderer already exists,
             the CircleRenderer will be deleted and then the RectRenderer will be added
          */
+        /*
         if (!(toAdd instanceof Component)) {
             if (toAdd instanceof ESBehaviourInstance) {
-                for (let component of this.components)
-                    if (Object.is(component, toAdd))
+                for (let component of this.components) {
+                    if (Object.is(component, toAdd)) {
                         return false;
+                    }
+                }
 
                 toAdd.entity = this;
                 this.components.push(new Script({
@@ -88,29 +93,38 @@ export class Entity {
             console.error(`Cannot add component: `, toAdd);
             return false;
         }
-        if (toAdd.type === 'transform') return false;
+
+         */
+        if (toAdd.type === 'transform') {
+            return false;
+        }
 
         for (const component of this.components) {
 
             if (component.type === 'GUIElement'){
-                if (toAdd.type !== 'Renderer')
+                if (toAdd.type !== 'Renderer') {
                     continue;
+                }
 
-                if (!['Renderer', 'Body', 'Camera'].includes(toAdd.type))
+                if (!['Renderer', 'Body', 'Camera'].includes(toAdd.type)) {
                     continue;
+                }
             }
 
             if (toAdd.type === 'GUIElement') {
                 // favour the listed types rather than a GUIElement
-                if (['Renderer', 'Body', 'Camera', 'Collider'].includes(component.type))
+                if (['Renderer', 'Body', 'Camera', 'Collider'].includes(component.type)) {
                     return false;
+                }
             }
 
-            if (component.type !== toAdd.type)
+            if (component.type !== toAdd.type) {
                 continue;
+            }
 
-            if (component.subtype !== toAdd.subtype)
+            if (component.subtype !== toAdd.subtype) {
                 continue;
+            }
 
             // remove offending component
             this.components.splice(this.components.indexOf(component),1);
@@ -123,27 +137,26 @@ export class Entity {
     hasComponent = (type: string, subType = ''): boolean => {
         if (type.toLowerCase() === 'transform') return true;
 
-        for (let c of this.components)
-            if (
-                (
-                    c.type === type &&
-                    (c.subtype === subType || subType === '')
-                ) || c.subtype === type
-            )
+        for (let c of this.components) {
+            if (c.type === type && (c.subtype === subType || subType === '')) {
                 return true;
+            }
+            if (c.subtype === type) {
+                return true;
+            }
+        }
 
         return false;
     };
 
-    getComponents = <Type extends Component> (type: string, subType=''): Type[] => {
+    getComponents = <T extends Component> (type: string, subType=''): T[] => {
         // returns all components of that type
-        let components: Type[] = [];
+        let components: T[] = [];
 
         for (const component of this.components)
-            if (
-                component.type === type &&
-                (component.subtype === subType || subType === '')
-            ) components.push(component as Type);
+            if (component.type === type && (component.subtype === subType || subType === '')){
+                components.push(component as T);
+            }
 
         return components;
     };
@@ -151,14 +164,11 @@ export class Entity {
     get sceneID (): number {
         let root: Transform | number = this.transform;
 
-        while (true) {
-            if (typeof root == 'number') {
-                break;
-            }
+        while (typeof root !== 'number') {
             root = root.parent;
         }
 
-        return <number> root;
+        return root;
     }
 
     generateID = (): number => {
@@ -180,7 +190,9 @@ export class Entity {
         for (let i = 0; i < Entity.entities.length; i++) {
             const entity = Entity.entities[i];
 
-            if (!Object.is(entity, this)) continue;
+            if (!Object.is(entity, this)) {
+                continue;
+            }
 
             delete Entity.entities.splice(i, 1)[0];
         }

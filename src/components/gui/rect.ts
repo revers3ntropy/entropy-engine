@@ -1,8 +1,8 @@
-import {rgb} from "../../util/colour.js";
-import {Transform} from "../transform.js";
-import {roundedRect} from "../../systems/rendering/basicShapes.js";
-import {GUIElement} from "./gui.js";
-import {v2} from "../../maths/v2.js";
+import {rgb} from "../../util/colour";
+import {Transform} from "../transform";
+import {roundedRect} from "../../systems/rendering/basicShapes";
+import {GUIElement} from "./gui";
+import {v2} from "../../maths/v2";
 
 export class GUIRect extends GUIElement {
     // @ts-ignore
@@ -15,12 +15,12 @@ export class GUIRect extends GUIElement {
     radius: number
 
     constructor ({
-                     zLayer = 1,
-                     width = 10,
-                     height = 10,
-                     colour = rgb(150, 150, 150),
-                     radius = 1
-                 }) {
+         zLayer = 1,
+         width = 10,
+         height = 10,
+         colour = rgb(150, 150, 150),
+         radius = 1
+     }) {
         super('GUIRect', zLayer);
 
         this.addPublic({

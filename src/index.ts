@@ -1,72 +1,44 @@
-import 'https://entropyengine.dev/libraries/matter.js';
+import { Entity } from "./ECS/entity"
+import { startAnimation } from "./systems/rendering/startAnimation"
+import { Script } from './components/scriptComponent'
+import {Collider} from './components/colliders'
+import { license } from "./license"
+import {getMousePos, input, setMousePos} from "./input"
+import { GUIElement, GUITextBox } from "./components/gui/gui"
+import { entitiesFromJSON, initialiseScenes } from './JSONprocessor'
+import {Camera} from "./components/camera"
+import {getCanvasStuff, setCanvasSize} from "./util/general"
+import {rgb} from './util/colour'
+import {Scene} from './ECS/scene'
+import {Systems} from "./ECS/system";
+import {Transform} from "./components/transform";
+import {RectCollider, CircleCollider} from "./components/colliders";
+import { v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3 } from './maths/maths'
+import { Body } from "./components/body"
+import { CircleRenderer, RectRenderer, ImageRenderer2D, MeshRenderer } from './components/renderComponents'
+import { GUIBox, GUIText, GUIRect, GUICircle, GUIPolygon, GUIImage } from './components/gui/gui'
 
-import { Entity } from "./ECS/entity.js"
-import { startAnimation } from "./systems/rendering/startAnimation.js"
-import { Script } from './components/scriptComponent.js'
-import {Collider} from './components/colliders.js'
-import { license } from "./license.js"
-import {getMousePos, input, setMousePos} from "./input.js"
-import { GUIElement, GUITextBox } from "./components/gui/gui.js"
-import { entitiesFromJSON, initialiseScenes } from './JSONprocessor.js'
-import {Camera} from "./components/camera.js"
-import {getCanvasStuff, setCanvasSize} from "./util/general.js"
-import {rgb} from './util/colour.js'
-import {Scene} from './ECS/scene.js'
-import {Systems} from "./ECS/system.js";
-import {Transform} from "./components/transform.js";
-import {RectCollider, CircleCollider} from "./components/colliders.js";
-import { v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3 } from './maths/maths.js'
-import { Body } from "./components/body.js"
-import { CircleRenderer, RectRenderer, ImageRenderer2D, MeshRenderer } from './components/renderComponents.js'
-import { GUIBox, GUIText, GUIRect, GUICircle, GUIPolygon, GUIImage } from './components/gui/gui.js'
+import {init as initEES} from './scripting/scripts'
 
-import {init as initEES} from "./scripting/EEScript/index.js";
-import {globalConstants} from "./scripting/EEScript/constants.js";
+import './systems/physics/physics';
+import './systems/rendering/renderer';
+import './systems/entities/entityController';
 
-import './systems/physics/physics.js';
-import './systems/rendering/renderer.js';
-import './systems/entities/entityController.js';
-
-export {rgb} from './util/colour.js'
-export { Entity } from "./ECS/entity.js"
-export {Script} from './components/scriptComponent.js'
-export { CircleCollider, RectCollider } from './components/colliders.js'
-export { v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3 } from './maths/maths.js'
-export { Body } from "./components/body.js"
-export { CircleRenderer, RectRenderer, ImageRenderer2D, MeshRenderer } from './components/renderComponents.js'
-export { GUIBox, GUIText, GUITextBox, GUIRect, GUICircle, GUIPolygon, GUIImage } from './components/gui/gui.js'
-export { input } from './input.js'
-export { Camera } from './components/camera.js'
-export { entitiesFromJSON } from './JSONprocessor.js'
-export {Transform} from './components/transform.js'
-export {Scene} from './ECS/scene.js'
-export {Systems} from './ECS/system.js';
-
-// setup the global constants for entropy script
-globalConstants['CircleCollider'] = CircleCollider;
-globalConstants['RectCollider'] = RectCollider;
-globalConstants['Script'] = Script;
-globalConstants['TriangleV2'] = TriangleV2;
-globalConstants['TriangleV3'] = TriangleV3;
-globalConstants['MeshV2'] = MeshV2;
-globalConstants['MeshV3'] = MeshV3;
-globalConstants['Body'] = Body;
-globalConstants['CircleRenderer'] = CircleRenderer;
-globalConstants['RectRenderer'] = RectRenderer;
-globalConstants['ImageRenderer2D'] = ImageRenderer2D;
-globalConstants['MeshRenderer'] = MeshRenderer;
-globalConstants['GUIBox'] = GUIBox;
-globalConstants['GUIText'] = GUIText;
-globalConstants['GUITextBox'] = GUITextBox;
-globalConstants['GUIRect'] = GUIRect;
-globalConstants['GUICircle'] = GUICircle;
-globalConstants['GUIPolygon'] = GUIPolygon;
-globalConstants['GUIImage'] = GUIImage;
-globalConstants['Camera'] = Camera;
-globalConstants['Transform'] = Transform;
-
-Number.prototype.clamp = function (min: number, max: number) {
-    return Math.min(Math.max(this as number, min), max);
+export {
+    rgb,
+    Entity,
+    Script,
+    CircleCollider, RectCollider,
+    v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3,
+    Body,
+    CircleRenderer, RectRenderer, ImageRenderer2D, MeshRenderer,
+    GUIBox, GUIText, GUITextBox, GUIRect, GUICircle, GUIPolygon, GUIImage,
+    input,
+    Camera,
+    entitiesFromJSON,
+    Transform,
+    Scene,
+    Systems
 };
 
 /**
@@ -74,7 +46,7 @@ Number.prototype.clamp = function (min: number, max: number) {
  * @param {string} [canvasID="canvas"] ID of the canvas HTML element being drawn to
  * @param {number} [performanceDebug=0] Level of timings logged to JS console
  * @param {boolean} [shouldInitEES=true] Only set to false if Entropy Engine Script has already been initialised
- * @returns {object} Contains run function which starts the game loop
+ * @returns { { run: () => Promise<void> } } Contains run function which starts the game loop
  */
 export default function entropyEngine ({
     canvasID= "canvas",
@@ -132,9 +104,11 @@ export default function entropyEngine ({
             let collider = sprite.getComponent<Collider>('Collider');
             const mousePos = getMousePos(canvas, evt);
 
-            if (!collider.overlapsPoint(sprite.transform, mousePos)) return;
+            if (!collider.overlapsPoint(sprite.transform, mousePos)) {
+                return;
+            }
 
-            script.runMethod('onMouseDown', []);
+            //script.runMethod('onMouseDown', []);
         });
     }, false);
 
@@ -158,14 +132,17 @@ export default function entropyEngine ({
                 let collider = sprite.getComponent<Collider>('Collider');
                 const mousePos = getMousePos(canvas, evt);
 
-                if (!collider.overlapsPoint(sprite.transform, mousePos)) return;
+                if (!collider.overlapsPoint(sprite.transform, mousePos)) {
+                    return;
+                }
 
-                script.runMethod('onMouseUp', []);
+                //script.runMethod('onMouseUp', []);
 
             } else if (sprite.hasComponent('GUIElement')) {
                 const ui = sprite.getComponent<GUIElement>('GUIElement');
-                if (ui.hovered)
-                    script.runMethod('onClick', []);
+                if (ui.hovered) {
+                    //script.runMethod('onClick', []);
+                }
 
                 if (ui.subtype !== 'GUITextBox') return;
 
@@ -203,7 +180,7 @@ export default function entropyEngine ({
         window.requestAnimationFrame(tick);
     }
 
-    return {run};
+    return { run };
 }
 
 // cache busting
@@ -230,8 +207,9 @@ export async function runFromJSON (path: string, config: any = {}) {
     const data = await data_.json();
 
     for (let key in data) {
-        if (['entities', 'scenes'].includes(key))
+        if (['entities', 'scenes'].includes(key)) {
             continue;
+        }
 
         config[key] = data[key];
     }

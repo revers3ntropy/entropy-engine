@@ -1,11 +1,12 @@
-import {Systems} from "../../ECS/system.js";
-import {Scene} from "../../ECS/scene.js";
-import type {Body} from "../../components/body.js";
-import {CircleCollider, Collider, RectCollider} from "../../components/colliders.js";
-import {Entity} from "../../ECS/entity.js";
-import {v3} from "../../maths/v3.js";
-import {Script} from "../../components/scriptComponent.js";
-import {N_any} from "../../scripting/EEScript/nodes.js";
+import * as Matter from 'matter-js/build/matter';
+
+import {Systems} from "../../ECS/system";
+import {Scene} from "../../ECS/scene";
+import type {Body} from "../../components/body";
+import {CircleCollider, Collider, RectCollider} from "../../components/colliders";
+import {Entity} from "../../ECS/entity";
+import {v3} from "../../maths/v3";
+import {Script} from "../../components/scriptComponent";
 
 Systems.systems.push({
     name: 'Physics',
@@ -44,7 +45,8 @@ Systems.systems.push({
         mBody.velocity = Matter.Vector.create(body.velocity.x, body.velocity.y);
         mBody.frictionAir = body.airResistance;
         mBody.mass = body.mass;
-        mBody.restitution = body.bounciness.clamp(0, 1);
+        // clamp between 0 and 1
+        mBody.restitution = Math.max(Math.min(body.bounciness, 1), 0);
 
 
         let newVerts = [];
@@ -87,12 +89,16 @@ Systems.systems.push({
     },
 
     callCollides: function (entity: Entity, collidesWith: Entity) {
-        for (let component of entity.components)
-            if (component.type === 'Script')
+        for (let component of entity.components) {
+            if (component.type === 'Script') {
+                /*
                 (component as Script)
                     .runMethod('onCollision',
                         [new N_any(collidesWith)]
                     );
+                 */
+            }
+        }
     },
 
     updateScripts: function (pairs: [Matter.Body, Entity][]) {
@@ -152,9 +158,9 @@ Systems.systems.push({
 
         // UNBUILD
         for (let entity of scene.entities) {
-            if (!entity.hasComponent('Body') ||
-                !entity.hasComponent('Collider')
-            ) continue;
+            if (!entity.hasComponent('Body') || !entity.hasComponent('Collider')) {
+                continue;
+            }
 
             let collider = entity.getComponent<Collider>('Collider');
             let mBody = collider.MatterBody;

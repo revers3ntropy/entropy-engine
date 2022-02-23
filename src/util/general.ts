@@ -1,4 +1,4 @@
-import {v2, v3} from "../maths/maths.js";
+import {v2, v3} from "../maths/maths";
 
 export function sleep(ms: number) {
     // @ts-ignore

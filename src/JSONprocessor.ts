@@ -1,19 +1,17 @@
-import { Entity } from './ECS/entity.js';
-import {v2, v3} from "./maths/maths.js";
-import {Component} from "./ECS/component.js";
-import {Script} from "./components/scriptComponent.js";
+import { Entity } from './ECS/entity';
+import {v2, v3} from "./maths/maths";
+import {Component} from "./ECS/component";
+import {Script} from "./components/scriptComponent";
 // all components
-import {CircleCollider, RectCollider} from './components/colliders.js';
-import {Body} from './components/body.js';
-import {CircleRenderer, ImageRenderer2D, RectRenderer, MeshRenderer} from './components/renderComponents.js';
-import {GUIBox, GUICircle, GUIImage, GUIPolygon, GUIRect, GUIText, GUITextBox} from './components/gui/gui.js';
-import {Camera} from './components/camera.js';
-import { Transform} from "./components/transform.js";
-import {defaultSceneSettings, Scene, sceneSettings} from './ECS/scene.js';
-import {rgba} from "./util/colour.js";
-import {nameFromScriptURL} from './util/general.js';
-import {run} from "./scripting/EEScript/index.js";
-import {ESBehaviourInstance} from "./scripting/EEScript/ESBehaviour.js";
+import {CircleCollider, RectCollider} from './components/colliders';
+import {Body} from './components/body';
+import {CircleRenderer, ImageRenderer2D, RectRenderer, MeshRenderer} from './components/renderComponents';
+import {GUIBox, GUICircle, GUIImage, GUIPolygon, GUIRect, GUIText, GUITextBox} from './components/gui/gui';
+import {Camera} from './components/camera';
+import { Transform} from "./components/transform";
+import {defaultSceneSettings, Scene, sceneSettings} from './ECS/scene';
+import {rgba} from "./util/colour";
+import {nameFromScriptURL} from './util/general';
 
 // reference everything so the ts compiler will think that it is being used and wont delete the import
 CircleCollider; RectCollider;
@@ -96,15 +94,15 @@ function dealWithTransform (transformJSON: any) {
     return {parentInfo, transform};
 }
 
-async function dealWithScriptComponent (componentJSON: any): Promise<Script | undefined> {
-
+async function dealWithScriptComponent (componentJSON: any): Promise<Script | void> {
+    /*
     // two parts to a script: path and name
     const path = componentJSON['path'];
     // use either a specified name or the name of the file (found using some regex)
     const className = componentJSON['name'] || componentJSON['className']
     // gets name of file
 
-    let scriptNode: undefined | ESBehaviourInstance;
+    let scriptNode: undefined;
 
     try {
         let scriptData = await fetch(`${path}?${cacheBust}`);
@@ -172,9 +170,11 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | un
         console.error(`Error initialising script '${componentJSON['name'] || 'unnamed script'}': ${E}`);
     }
     return;
+
+     */
 }
 
-async function componentProccessor(componentJSON: any): Promise<Component|undefined> {
+async function componentProcessor(componentJSON: any): Promise<Component|void> {
     let component;
     if (componentJSON['type'] === 'Script') {
         // deal with scripts separately
@@ -213,7 +213,7 @@ export async function getEntityFromJSON (JSON: any) {
     const {parentInfo, transform} = dealWithTransform(transformJSON || {});
     // components
     for (let componentJSON of componentsJSON) {
-        const component = await componentProccessor(componentJSON);
+        const component = await componentProcessor(componentJSON);
 
         if (component)
             components.push(component);

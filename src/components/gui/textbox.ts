@@ -1,8 +1,8 @@
-import {rgb} from "../../util/colour.js";
-import {Transform} from "../transform.js";
-import {GUIElement} from "./gui.js";
-import {GUIText} from "./text.js";
-import {v2} from "../../maths/v2.js";
+import {rgb} from "../../util/colour";
+import {Transform} from "../transform";
+import {GUIElement} from "./gui";
+import {GUIText} from "./text";
+import {v2} from "../../maths/v2";
 
 export class GUITextBox extends GUIElement {
     text: GUIText;

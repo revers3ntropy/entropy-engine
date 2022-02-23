@@ -1,9 +1,9 @@
-import {Entity} from './entity.js';
-import {Camera} from "../components/camera.js";
-import {v3} from "../maths/maths.js";
-import {colour, rgb} from "../util/colour.js";
-import {Script} from "../components/scriptComponent.js";
-import {getCanvasStuff} from "../util/general.js";
+import {Entity} from './entity';
+import {Camera} from "../components/camera";
+import {v3} from "../maths/maths";
+import {colour, rgb} from "../util/colour";
+import {Script} from "../components/scriptComponent";
+import {getCanvasStuff} from "../util/general";
 
 export type sceneSettings = {
     // license + general
@@ -30,7 +30,7 @@ export type sceneSettings = {
 export const defaultSceneSettings = (): sceneSettings => ({
     license: '0000',
     version: '0.0.0',
-    gameName: 'my game',
+    gameName: 'Entropy Engine Game',
 
     canvasID: 'myCanvas',
     maxFrameRate: 60,
@@ -126,7 +126,7 @@ export class Scene {
     }
     broadcast (funcName: string, params: any[]) {
         this.loopThroughScripts((script: Script, entity: Entity) => {
-            script.runMethod(funcName, params);
+            //script.runMethod(funcName, params);
         });
     }
 

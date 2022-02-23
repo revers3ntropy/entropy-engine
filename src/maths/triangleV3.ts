@@ -1,5 +1,5 @@
-import {v3} from "./v3.js";
-import {TriangleV2} from "./triangleV2.js";
+import {v3} from "./v3";
+import {TriangleV2} from "./triangleV2";
 
 export class TriangleV3 {
 

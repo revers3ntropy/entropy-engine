@@ -1,7 +1,8 @@
-import { Component } from "../ECS/component.js"
-import {v2} from "../maths/maths.js"
-import {Transform} from "../index.js";
-import {rect} from "../systems/rendering/basicShapes";
+import * as Matter from 'matter-js/build/matter';
+
+import { Component } from "../ECS/component"
+import {v2} from "../maths/maths"
+import {Transform} from "../index";
 
 export abstract class Collider extends Component {
     // @ts-ignore

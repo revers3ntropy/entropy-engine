@@ -1,10 +1,10 @@
-import {rgb} from "../util/colour.js";
-import {v2, v3} from "../maths/maths.js";
-import {publicField, publicFieldConfig} from "../publicField.js";
+import {rgb} from "../util/colour";
+import {v2, v3} from "../maths/maths";
+import {publicField, publicFieldConfig} from "../publicField";
 
 
 export abstract class Component {
-    /*
+    /**
         subtype so you can have three-level inheritance for components, e.g. Component ==> Renderer ==> RectRenderer
         subtype is RectRenderer, type is Renderer
         as entities can only have a single of each type, can use 'getComponent(type)' without worrying about what type of that it is

@@ -1,4 +1,4 @@
-import {v3} from "./v3.js";
+import {v3} from "./v3";
 
 export class Matrix {
     m: number[][];

@@ -1,8 +1,8 @@
-import {rgb, colour} from "../../util/colour.js";
-import {Transform} from "../transform.js";
-import {circle} from "../../systems/rendering/basicShapes.js";
-import {GUIElement} from "./gui.js";
-import {v2} from "../../maths/v2.js";
+import {rgb, colour} from "../../util/colour";
+import {Transform} from "../transform";
+import {circle} from "../../systems/rendering/basicShapes";
+import {GUIElement} from "./gui";
+import {v2} from "../../maths/v2";
 
 export class GUICircle extends GUIElement {
     // @ts-ignore

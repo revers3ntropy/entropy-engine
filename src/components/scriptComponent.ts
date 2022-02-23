@@ -1,30 +1,20 @@
-import {Component} from '../ECS/component.js';
-import {global} from '../scripting/EEScript/constants.js';
-import { v2, v3 } from '../maths/maths.js';
-import {N_functionCall, Node} from '../scripting/EEScript/nodes.js';
-import {Position} from "../scripting/EEScript/position.js";
-import {Context} from "../scripting/EEScript/context.js";
-import {ESError} from "../scripting/EEScript/errors.js";
-import {Scene} from "../ECS/scene.js";
-import {Entity} from "../ECS/entity.js";
-import type {ESBehaviourInstance} from "../scripting/EEScript/ESBehaviour.js";
+import {Component} from '../ECS/component';
+import { v2, v3 } from '../maths/maths';
 
 export class Script extends Component {
     static runStartMethodOnInit = false;
 
-    script: ESBehaviourInstance | undefined;
-    // only used in the visual editor for downloading the script name
-    scriptName = '';
+    script: undefined;
     name = '';
 
     constructor(config: {
-        script: ESBehaviourInstance | undefined,
+        script: undefined,
     }) {
-        super("Script", config.script?.name ?? 'noscript')
+        super("Script", 'noscript')
         this.script = config.script;
 
         if (Script.runStartMethodOnInit) {
-            this.runMethod('Start', []);
+            //this.runMethod('Start', []);
         }
     }
 
@@ -60,20 +50,21 @@ export class Script extends Component {
             'type': 'Script',
             // assume that the script src is in scripts.js
             'path': 'scripts.js',
-            'name': this?.script?.name || this?.scriptName || this.script?.constructor.name,
-            'scriptName': this?.script?.name || this?.scriptName || this.script?.constructor.name,
+            'name': this.name,
             'public': this.jsonPublic(),
         }
     }
 
-    setScript (script: ESBehaviourInstance) {
+    setScript (script: undefined) {
         this.script = script;
-        this.subtype = this.script.name;
+        this.subtype = this.name;
 
-        if (Script.runStartMethodOnInit)
-            this.runMethod('Start', []);
+        if (Script.runStartMethodOnInit) {
+            //this.runMethod('Start', []);
+        }
     }
 
+    /*
     genContext (file: string): Context | ESError {
         let context = new Context(file);
 
@@ -114,6 +105,7 @@ export class Script extends Component {
             return;
         }
     }
+     */
 
     Update () {}
 }

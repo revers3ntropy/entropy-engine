@@ -1,9 +1,8 @@
-import {rgb} from "../../util/colour.js";
-import {Transform} from "../transform.js";
-import {GUIElement} from "./gui.js";
-import {text} from '../../systems/rendering/basicShapes.js'
-import {v2} from "../../maths/v2.js";
-
+import {rgb} from "../../util/colour";
+import {Transform} from "../transform";
+import {GUIElement} from "./gui";
+import {text} from '../../systems/rendering/basicShapes'
+import {v2} from "../../maths/v2";
 
 export class GUIText extends GUIElement {
     // @ts-ignore

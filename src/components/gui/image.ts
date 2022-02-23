@@ -1,11 +1,9 @@
-import {Transform} from "../transform.js";
-import {image} from "../../systems/rendering/basicShapes.js";
-import {GUIElement} from "./gui.js";
-import {v2} from "../../maths/v2.js";
+import {Transform} from "../transform";
+import {image} from "../../systems/rendering/basicShapes";
+import {GUIElement} from "./gui";
+import {v2} from "../../maths/v2";
 
 export class GUIImage extends GUIElement {
-    Start(transform: Transform): void {
-    }
     // @ts-ignore
     width: number;
     // @ts-ignore
@@ -37,16 +35,19 @@ export class GUIImage extends GUIElement {
         });
     }
 
-    draw(ctx: CanvasRenderingContext2D, transform: Transform): void {
+    Start (transform: Transform) {}
+    Update () {}
+
+    draw (ctx: CanvasRenderingContext2D, transform: Transform): void {
         const width = this.width * transform.scale.x;
         const height = this.height * transform.scale.y;
 
-        if (height <= 0 || width <= 0) return;
+        if (height <= 0 || width <= 0) {
+            return;
+        }
 
         image(ctx, transform.position.v2, new v2(width, height), this.url, transform.rotation.z);
     }
-
-    Update(): void {}
 
     touchingPoint (point: v2, ctx: CanvasRenderingContext2D, transform: Transform): boolean {
         // quite hard to implement as a polygon is a very complex shape

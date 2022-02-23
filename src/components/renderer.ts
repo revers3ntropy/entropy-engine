@@ -1,5 +1,5 @@
-import { JSONifyComponent } from '../util/general.js';
-import {Component} from '../ECS/component.js';
+import { JSONifyComponent } from '../util/general';
+import {Component} from '../ECS/component';
 
 export abstract class Renderer extends Component {
     abstract draw (...args: any[]): any;

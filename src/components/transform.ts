@@ -1,7 +1,7 @@
-import {v2, v3 } from "../maths/maths.js";
-import { Component } from "../ECS/component.js";
-import { Entity } from "../ECS/entity.js";
-import {Scene} from "../ECS/scene.js";
+import {v2, v3 } from "../maths/maths";
+import { Component } from "../ECS/component";
+import { Entity } from "../ECS/entity";
+import {Scene} from "../ECS/scene";
 
 export class Transform extends Component {
     // @ts-ignore

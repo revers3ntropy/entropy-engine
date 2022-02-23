@@ -1,4 +1,4 @@
-import {Component} from '../ECS/component.js';
+import {Component} from '../ECS/component';
 
 export interface webAPIToken {
     projectID: number;

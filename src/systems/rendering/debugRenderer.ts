@@ -1,19 +1,25 @@
-import {Camera} from '../../components/camera.js';
-import {Entity} from '../../ECS/entity.js';
-import {getCanvasSize} from '../../util/general.js';
-import {circle, rect, image, rotateAroundPointWrapper} from './basicShapes.js';
-import {v2} from '../../maths/maths.js';
-import {CircleCollider, RectCollider, Collider } from '../../components/colliders.js';
+import {Camera} from '../../components/camera';
+import {Entity} from '../../ECS/entity';
+import {getCanvasSize} from '../../util/general';
+import {circle, rect, image, rotateAroundPointWrapper} from './basicShapes';
+import {v2} from '../../maths/maths';
+import {CircleCollider, RectCollider, Collider } from '../../components/colliders';
+import { Transform } from '../../components/transform';
 
-import { Transform } from '../../components/transform.js';
-
+/**
+ * Gets the parameters to draw a grid
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @returns {{min: v2, max: v2, step: number, zoom: number}}
+ */
 function getGlobalGrid (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity) {
     const cameraC = camera.getComponent<Camera>('Camera');
     const zoom = cameraC.zoom;
     const canvasSize = getCanvasSize(canvas);
 
     // find nearest order of magnitude
-    var order = Math.floor(Math.log(zoom) / Math.LN10
+    let order = Math.floor(Math.log(zoom) / Math.LN10
         + 0.000000001); // because float math sucks like that
     const zoomToNearestPow = Math.pow(10,order);
     let step = (1/zoomToNearestPow) * 50;
@@ -21,8 +27,9 @@ function getGlobalGrid (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement
     const min = cameraC.screenSpaceToWorldSpace(new v2(0, 0), canvas, camera.transform.position);
     const max = cameraC.screenSpaceToWorldSpace(canvasSize, canvas, camera.transform.position);
 
-    if ((max.x - min.x) / step < 5)
+    if ((max.x - min.x) / step < 5) {
         step /= 2;
+    }
 
     const roundTo = (x: number) => Math.ceil(x / step) * step;
 

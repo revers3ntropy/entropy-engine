@@ -1,4 +1,4 @@
-import {Scene} from "./scene.js";
+import {Scene} from "./scene";
 
 export interface System {
     Start: (scene: Scene) => void;

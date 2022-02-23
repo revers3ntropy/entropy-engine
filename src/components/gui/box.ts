@@ -1,8 +1,8 @@
-import {rgb} from "../../util/colour.js";
-import {Transform} from "../transform.js";
-import {roundedRect} from "../../systems/rendering/basicShapes.js";
-import {GUIElement} from "./gui.js";
-import {v2} from "../../maths/v2.js";
+import {rgb} from "../../util/colour";
+import {Transform} from "../transform";
+import {roundedRect} from "../../systems/rendering/basicShapes";
+import {GUIElement} from "./gui";
+import {v2} from "../../maths/v2";
 
 export class GUIBox extends GUIElement {
     Start(transform: Transform): void {}

@@ -1,5 +1,5 @@
-import {TriangleV3} from "./triangleV3.js";
-import {v3} from "./v3.js";
+import {TriangleV3} from "./triangleV3";
+import {v3} from "./v3";
 
 export type PointArr = [number, number, number, number?];
 export type TriangleArr = [PointArr, PointArr, PointArr]

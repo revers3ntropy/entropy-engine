@@ -1,7 +1,7 @@
-import {v2} from "./maths/maths.js";
-import {Entity} from "./ECS/entity.js";
-import {GUIElement, GUITextBox} from "./components/gui/gui.js";
-import {Camera} from "./components/camera.js";
+import {v2} from "./maths/maths";
+import {Entity} from "./ECS/entity";
+import {GUIElement, GUITextBox} from "./components/gui/gui";
+import {Camera} from "./components/camera";
 
 export function getMousePos(canvas: HTMLCanvasElement, event: MouseEvent) {
     let rect = canvas.getBoundingClientRect();

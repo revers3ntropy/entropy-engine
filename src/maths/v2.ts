@@ -1,7 +1,7 @@
 /**
  * @module entropy-engine/maths/v2
  */
-import {v3} from "./v3.js";
+import {v3} from "./v3";
 
 /**
  * @description 2 dimensional Vector constructor

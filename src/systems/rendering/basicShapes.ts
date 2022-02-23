@@ -1,4 +1,4 @@
-import {v2} from "../../maths/maths.js";
+import {v2} from "../../maths/maths";
 
 export function reset(ctx: CanvasRenderingContext2D) {
     ctx.transform(1, 0, 0, -1, 0, ctx.canvas.height);

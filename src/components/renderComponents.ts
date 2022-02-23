@@ -1,3 +1,3 @@
-export * from './renderers2D.js';
-export * from './renderers3D.js';
-export * from './renderer.js';
+export * from './renderers2D';
+export * from './renderers3D';
+export * from './renderer';

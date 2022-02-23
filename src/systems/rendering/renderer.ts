@@ -1,13 +1,13 @@
-import {Systems} from "../../ECS/system.js";
-import {Scene} from "../../ECS/scene.js";
-import {image} from "./basicShapes.js";
-import {Camera} from "../../components/camera.js";
-import {Entity} from "../../ECS/entity.js";
-import {v2} from "../../maths/v2.js";
-import {colour, rgb} from "../../util/colour.js";
-import {getCanvasSize} from "../../util/general.js";
-import {GUIElement} from "../../components/gui/guiElement.js";
-import {Renderer} from "../../components/renderComponents.js";
+import {Systems} from "../../ECS/system";
+import {Scene} from "../../ECS/scene";
+import {image} from "./basicShapes";
+import {Camera} from "../../components/camera";
+import {Entity} from "../../ECS/entity";
+import {v2} from "../../maths/v2";
+import {colour, rgb} from "../../util/colour";
+import {getCanvasSize} from "../../util/general";
+import {GUIElement} from "../../components/gui/guiElement";
+import {Renderer} from "../../components/renderComponents";
 
 function orderSpritesForRender (sprites: Entity[]): Entity[] {
     // sort the entities by their z position
