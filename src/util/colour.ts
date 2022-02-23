@@ -68,20 +68,20 @@ export class colour {
             return rgb(parseInt(m[1]), parseInt(m[2]), parseInt(m[3]));
         }
 
-        return {
-            'red': rgb(255, 0, 0),
-            'green': rgb(0, 255, 0),
-            'blue': rgb(0, 0, 255),
-            'white': rgb(255, 255, 255),
-
-            // default to black
-        }[val] || rgb(0, 0, 0);
+        return namedColours[val] || rgb(0, 0, 0);
     }
 }
 
 export function rgb (red: number, green: number, blue: number): colour {
     return new colour(red, green, blue);
 }
+
+const namedColours: {[k: string]: colour} = {
+    'red': rgb(255, 0, 0),
+    'green': rgb(0, 255, 0),
+    'blue': rgb(0, 0, 255),
+    'white': rgb(255, 255, 255),
+};
 
 export function rgba (red: number, green: number, blue: number, alpha: number): colour {
     return new colour(red, green, blue, alpha);

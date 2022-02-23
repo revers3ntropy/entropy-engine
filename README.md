@@ -9,6 +9,7 @@ when importing the engine, and use absolute paths to everything (Not recommended
 
 ## Boilerplate:
 .html file:
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +23,7 @@ when importing the engine, and use absolute paths to everything (Not recommended
 </head>
 
 <body>
-    <canvas id="myCanvas"></canvas>
+<canvas id="myCanvas"></canvas>
 </body>
 </html>
 ```

@@ -1,0 +1,23 @@
+{
+  "name": "entropy-engine",
+  "version": "0.0.0",
+  "description": "TS game engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revers3ntropy/entropy-engine.git"
+  },
+  "keywords": [
+    "typescript",
+    "game engine",
+    "web"
+  ],
+  "author": "revers3ntropy",
+  "bugs": {
+    "url": "https://github.com/revers3ntropy/entropy-engine/issues"
+  },
+  "homepage": "https://entropyengine.dev"
+}

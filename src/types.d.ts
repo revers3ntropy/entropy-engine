@@ -544,7 +544,7 @@ declare namespace Matter {
 
 
         /*
-         * Sets the opacity. 1.0 is fully opaque. 0.0 is fully translucent
+         * Sets the opacity. entropy-engine is fully opaque. 0.0 is fully translucent
          */
         opacity?: number | undefined;
     }
