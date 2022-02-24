@@ -2,6 +2,13 @@ import { Entity } from './ECS/entity';
 import {v2, v3} from "./maths/maths";
 import {Component} from "./ECS/component";
 import {Script} from "./components/scriptComponent";
+
+import {Context} from 'entropy-script/src/runtime/context';
+import {global} from 'entropy-script/src/constants';
+import {ESNamespace, ESString} from 'entropy-script/src/runtime/primitiveTypes';
+import {run} from 'entropy-script/src';
+import {ESError} from 'entropy-script/src/errors';
+
 // all components
 import {CircleCollider, RectCollider} from './components/colliders';
 import {Body} from './components/body';
@@ -84,52 +91,56 @@ function dealWithTransform (transformJSON: any) {
 
     const transform = new Transform({});
 
-    if (transformJSON['position'])
+    if (transformJSON['position']) {
         transform.position = v3.fromArray(transformJSON['position']);
-    if (transformJSON['scale'])
+    }
+    if (transformJSON['scale']) {
         transform.scale = v3.fromArray(transformJSON['scale']);
-    if (transformJSON['rotation'])
+    }
+    if (transformJSON['rotation']) {
         transform.rotation = v3.fromArray(transformJSON['rotation']);
+    }
 
     return {parentInfo, transform};
 }
 
-async function dealWithScriptComponent (componentJSON: any): Promise<Script | void> {
-    /*
+async function dealWithScriptComponent (componentJSON: any): Promise<Script | void | ESError> {
     // two parts to a script: path and name
     const path = componentJSON['path'];
     // use either a specified name or the name of the file (found using some regex)
     const className = componentJSON['name'] || componentJSON['className']
     // gets name of file
 
-    let scriptNode: undefined;
+    let scriptNode: ESNamespace | undefined;
 
     try {
         let scriptData = await fetch(`${path}?${cacheBust}`);
-        let scriptRaw = await scriptData.text();
+        let code = await scriptData.text();
         let name = nameFromScriptURL(path);
 
-        let res = run(scriptRaw);
+        const env = new Context();
+        env.parent = global;
+        env.path = path;
+
+        const fileName: string = path.split('/').pop();
+
+        const n = new ESNamespace(new ESString(fileName), {});
+
+        const res = run(code, {
+            env,
+            measurePerformance: false,
+            fileName,
+            currentDir: path,
+        });
+
+        n.__value__ = env.getSymbolTableAsDict();
+
         if (res.error) {
             console.log(res.error.str);
             return;
         }
 
-        let node;
-
-        for (let line of res.val) {
-            if (!(line instanceof ESBehaviourInstance)) continue;
-            if (line.name !== name) continue;
-            node = line;
-            break;
-        }
-
-        if (!(node instanceof ESBehaviourInstance)) {
-            console.error('Node not instance of N_ESBehaviour: ', node)
-            return;
-        }
-
-        scriptNode = node;
+        scriptNode = n;
     } catch (e) {
         console.error(`Script Error: ${e}`);
         return;
@@ -137,7 +148,9 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
     // evaluate the script name as JS code, like when instantiating the component
     try {
         const script = new Script({
-            script: scriptNode
+            script: scriptNode,
+            path,
+            name: scriptName,
         });
         script.name = className;
         script.scriptName = className;
@@ -170,8 +183,6 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
         console.error(`Error initialising script '${componentJSON['name'] || 'unnamed script'}': ${E}`);
     }
     return;
-
-     */
 }
 
 async function componentProcessor(componentJSON: any): Promise<Component|void> {

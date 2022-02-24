@@ -1,20 +1,32 @@
 import {Component} from '../ECS/component';
+import type {Entity} from '../ECS/entity.js';
 import { v2, v3 } from '../maths/maths';
+import {global} from 'entropy-script/src/constants';
+
+import {Primitive, ESNamespace, ESFunction} from 'entropy-script/src/runtime/primitiveTypes';
+import {ESJSBinding} from 'entropy-script/src/runtime/primitives/esjsbinding';
+import {ESString} from 'entropy-script/src/runtime/primitiveTypes';
 
 export class Script extends Component {
     static runStartMethodOnInit = false;
 
-    script: undefined;
+    script: ESNamespace | undefined;
     name = '';
+    path: string;
 
-    constructor(config: {
-        script: undefined,
+    constructor ({path, name, entity, script}: {
+        path: string,
+        name: string,
+        entity?: Entity,
+        script?: ESNamespace
     }) {
-        super("Script", 'noscript')
-        this.script = config.script;
+        super("Script", name || 'noscript')
+        this.path = path;
+
+        this.script = script;
 
         if (Script.runStartMethodOnInit) {
-            //this.runMethod('Start', []);
+            this.runMethod('Start', entity, []);
         }
     }
 
@@ -48,64 +60,23 @@ export class Script extends Component {
     json () {
         return {
             'type': 'Script',
-            // assume that the script src is in scripts.js
             'path': 'scripts.js',
             'name': this.name,
             'public': this.jsonPublic(),
         }
     }
 
-    setScript (script: undefined) {
-        this.script = script;
-        this.subtype = this.name;
+    runMethod = (functionName: string, entity: Entity | undefined, args: Primitive[] = []) => {
+        args = [new ESJSBinding(entity), ...args];
+        const method = this.script?.__getProperty__({context: global}, new ESString(functionName));
 
-        if (Script.runStartMethodOnInit) {
-            //this.runMethod('Start', []);
-        }
-    }
-
-    /*
-    genContext (file: string): Context | ESError {
-        let context = new Context(file);
-
-        context.parent = global;
-        let setRes = context.setOwn(this.script, 'this');
-        if (setRes instanceof ESError) return setRes;
-
-        if (this?.script?.entity) {
-            setRes = context.setOwn(this?.script?.entity, 'entity');
-            if (setRes instanceof ESError) return setRes;
-
-            setRes = context.setOwn(this?.script?.entity.transform, 'transform');
-            if (setRes instanceof ESError) return setRes;
-        }
-
-        setRes = context.setOwn(Scene.activeScene.broadcast, 'broadcast');
-        if (setRes instanceof ESError) return setRes;
-
-        setRes = context.setOwn(Entity, 'Entity');
-        if (setRes instanceof ESError) return setRes;
-        setRes = context.setOwn(Scene, 'Scene');
-        if (setRes instanceof ESError) return setRes;
-
-        return context;
-    }
-
-    runMethod (functionName: string, args: Node[] = []) {
-        for (let method of this?.script?.methods ?? []) {
-            if (method.name !== functionName) continue;
-
-            const caller = new N_functionCall(Position.unknown, Position.unknown, method, args);
-            let context = this.genContext(method.startPos.file);
-            if (context instanceof ESError)
-                return console.error(context.str);
-
-            const res = caller.interpret(context);
-            if (res.error) console.error(res.error.str);
+        if (!(method instanceof ESFunction)) {
+            console.error(`Cannot run method '${functionName}'`);
             return;
         }
+
+        method.__call__({context: global}, ...args);
     }
-     */
 
     Update () {}
 }

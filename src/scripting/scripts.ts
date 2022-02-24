@@ -1,5 +1,5 @@
+import * as es from 'entropy-script/src';
 
-/*
 import { CircleCollider, RectCollider } from "../components/colliders.js";
 import { Script } from "../components/scriptComponent.js";
 import { TriangleV2 } from "../maths/triangleV2.js";
@@ -19,30 +19,33 @@ import { GUIImage } from "../components/gui/image.js";
 import { Camera } from "../components/camera.js";
 import { Transform } from "../components/transform.js";
 
-globalConstants['CircleCollider'] = CircleCollider;
-globalConstants['RectCollider'] = RectCollider;
-globalConstants['Script'] = Script;
-globalConstants['TriangleV2'] = TriangleV2;
-globalConstants['TriangleV3'] = TriangleV3;
-globalConstants['MeshV2'] = MeshV2;
-globalConstants['MeshV3'] = MeshV3;
-globalConstants['Body'] = Body;
-globalConstants['CircleRenderer'] = CircleRenderer;
-globalConstants['RectRenderer'] = RectRenderer;
-globalConstants['ImageRenderer2D'] = ImageRenderer2D;
-globalConstants['MeshRenderer'] = MeshRenderer;
-globalConstants['GUIBox'] = GUIBox;
-globalConstants['GUIText'] = GUIText;
-globalConstants['GUITextBox'] = GUITextBox;
-globalConstants['GUIRect'] = GUIRect;
-globalConstants['GUICircle'] = GUICircle;
-globalConstants['GUIPolygon'] = GUIPolygon;
-globalConstants['GUIImage'] = GUIImage;
-globalConstants['Camera'] = Camera;
-globalConstants['Transform'] = Transform;
 
- */
+export async function init () {
 
-export function init () {
-
+    await es.init(console.log, () => {}, false, {
+        print: console.log,
+        ee: {
+            CircleCollider,
+            RectCollider,
+            Script,
+            TriangleV2,
+            TriangleV3,
+            MeshV2,
+            MeshV3,
+            Body,
+            CircleRenderer,
+            ImageRenderer2D,
+            RectRenderer,
+            MeshRenderer,
+            GUIBox,
+            GUIText,
+            GUITextBox,
+            GUIRect,
+            GUICircle,
+            GUIPolygon,
+            GUIImage,
+            Camera,
+            Transform,
+        }
+    });
 }

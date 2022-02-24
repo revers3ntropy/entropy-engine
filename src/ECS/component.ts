@@ -6,8 +6,8 @@ import {publicField, publicFieldConfig} from "../publicField";
 export abstract class Component {
     /**
         subtype so you can have three-level inheritance for components, e.g. Component ==> Renderer ==> RectRenderer
-        subtype is RectRenderer, type is Renderer
-        as entities can only have a single of each type, can use 'getComponent(type)' without worrying about what type of that it is
+        subtype is RectRenderer, type is Renderer.
+        As entities can only have a single of each type, can use 'getComponent(type)' without worrying about what type of that it is
         e.g. entity.getComponent('Renderer').draw()
         instead of dealing with every possible renderer
 
@@ -58,8 +58,9 @@ export abstract class Component {
             enumerable: true,
 
             get () {
-                if (config.overrideGet === undefined)
+                if (config.overrideGet === undefined) {
                     return this.getPublic(config.name)
+                }
                 
                 return config.overrideGet();
             },

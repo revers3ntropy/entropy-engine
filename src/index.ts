@@ -200,7 +200,7 @@ const scriptFetchInit = {
  */
 export async function runFromJSON (path: string, config: any = {}) {
 
-    initEES();
+    await initEES();
 
     // get and init the
     const data_: any = await fetch(path, scriptFetchInit);
