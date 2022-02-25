@@ -41,6 +41,13 @@ function getGlobalGrid (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement
     }
 }
 
+/**
+ * Renders a grid onto the canvas
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @param {string} colour
+ */
 function renderGlobalGrid (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, colour: string) {
     const {step, min, max} = getGlobalGrid(ctx, canvas, camera);
     const canvasSize = getCanvasSize(canvas);
@@ -61,6 +68,14 @@ function renderGlobalGrid (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElem
     }
 }
 
+/**
+ * Renders dots on the grid at intervals
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @param {string} colour
+ * @param {number} r
+ */
 function renderGridDots (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, colour: string, r: number) {
     const {step, min, max} = getGlobalGrid(ctx, canvas, camera);
     const cameraC = camera.getComponent<Camera>('Camera');
@@ -73,12 +88,29 @@ function renderGridDots (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
     }
 }
 
+/**
+ * Draws a large dot at (0,0)
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @param {string} colour
+ * @param {number} r
+ */
 function renderCenterDot (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, colour: string, r: number) {
     const cameraC = camera.getComponent<Camera>('Camera');
     const pos = cameraC.worldSpaceToScreenSpace(v2.zero, canvas, camera.transform.position);
     circle(ctx, pos, r, colour);
 }
 
+/**
+ * Draws the outline of colliders on an entity
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @param {string} colour
+ * @param {Collider} collider
+ * @param {Transform} transform
+ */
 function renderCollider (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, colour: string, collider: Collider, transform: Transform) {
     const cameraC = camera.getComponent<Camera>('Camera');
     const zoom = camera.getComponent<Camera>('Camera').zoom;
@@ -113,6 +145,14 @@ function renderCollider (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
     }
 }
 
+/**
+ * Renders the colliders on all entities
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @param {string} colour
+ * @param {Entity[]} sprites
+ */
 function renderColliders (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, colour: string, sprites: Entity[]) {
     for (const sprite of sprites) {
         if (!sprite.hasComponent('Collider')) continue;
@@ -121,6 +161,13 @@ function renderColliders (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasEleme
     }
 }
 
+/**
+ * Draws a camera image where the camera is
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera
+ * @param {Entity[]} sprites
+ */
 export function drawCameras (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, sprites: Entity[]) {
     const cameraC = camera.getComponent<Camera>('Camera');
     for (const sprite of sprites) {
@@ -131,6 +178,14 @@ export function drawCameras (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasEl
     }
 }
 
+/**
+ * Draws a box around the view of the camera
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {HTMLCanvasElement} canvas
+ * @param {Entity} camera camera from whos point of view to render another camera
+ * @param {Entity} cameraToDraw camera who's view is being drawn
+ * @param {string} colour outline colour
+ */
 export function drawCameraViewArea (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, camera: Entity, cameraToDraw: Entity, colour: string) {
     const canvasSize = getCanvasSize(canvas);
     const cameraC = camera.getComponent<Camera>('Camera');
@@ -154,6 +209,13 @@ export function drawCameraViewArea (ctx: CanvasRenderingContext2D, canvas: HTMLC
     rect(ctx, new v2(minScreenSpace.x, maxScreenSpace.y), xSize, 1, colour, 0);
 }
 
+/**
+ * Renders all debug stuff
+ * @param {HTMLCanvasElement} canvas
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Entity} camera
+ * @param {Entity[]} entities
+ */
 export function renderDebug (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, camera: Entity, entities: Entity[]) {
     renderGlobalGrid(ctx, canvas, camera,  `rgba(150, 150, 150, 0.3)`);
     //renderGridDots(ctx, canvas, camera,  `rgba(150, 150, 150, 0.4)`, 1);
@@ -162,6 +224,13 @@ export function renderDebug (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
     drawCameras(ctx, canvas, camera, entities);
 }
 
+/**
+ * Renders the outline of an entity
+ * @param {HTMLCanvasElement} canvas
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Entity} camera
+ * @param {Entity} selected
+ */
 export function renderSelectedOutline (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, camera: Entity, selected: Entity) {
     if (!selected.hasComponent('Collider')) return;
     const collider = selected.getComponent<Collider>('Collider');

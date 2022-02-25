@@ -7,7 +7,7 @@ import {v2} from "../../maths/v2";
 import {colour, rgb} from "../../util/colour";
 import {getCanvasSize} from "../../util/general";
 import {GUIElement} from "../../components/gui/guiElement";
-import {Renderer} from "../../components/renderComponents";
+import {Renderer} from '../../components/renderer';
 
 function orderSpritesForRender (sprites: Entity[]): Entity[] {
     // sort the entities by their z position
@@ -125,7 +125,10 @@ Systems.systems.push({
 
     Update: (scene: Scene) => {
         const ctx = scene.settings.ctx;
-        if (!ctx) return;
+        if (!ctx) {
+            return;
+        }
         renderAll(scene.entities, ctx.canvas, ctx, scene.settings.backgroundTint, scene.settings.backgroundImage);
-    }
+    },
+    order: 10
 });

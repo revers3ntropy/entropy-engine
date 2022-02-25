@@ -153,10 +153,11 @@ export class Entity {
         // returns all components of that type
         let components: T[] = [];
 
-        for (const component of this.components)
+        for (const component of this.components) {
             if (component.type === type && (component.subtype === subType || subType === '')){
                 components.push(component as T);
             }
+        }
 
         return components;
     };

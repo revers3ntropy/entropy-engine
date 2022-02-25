@@ -1,7 +1,11 @@
 import {v2, v3} from "../maths/maths";
 
+/**
+ * Resolves promise after an amount of time
+ * @param {number} ms
+ * @returns {Promise<unknown>}
+ */
 export function sleep(ms: number) {
-    // @ts-ignore
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -14,12 +18,19 @@ export function getZoomScaledPosition (pos: v2, zoom: number, center: v2): v2 {
     return pos.sub(center).scale(zoom).add(center);
 }
 
-export function getCanvasStuff(id: string) {
-    const c = <HTMLCanvasElement> document.getElementById(id);
-    return {
-        canvas: c,
-        ctx: <CanvasRenderingContext2D> c.getContext('2d')
+export function getCanvasStuff (id: string): {
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+} {
+    const canvas = document.getElementById(id);
+    if (!(canvas instanceof HTMLCanvasElement)) {
+        throw 'Canvas element is not instance of HTMLCanvasElement';
     }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        throw `Canvas doesn't have 2d context`;
+    }
+    return { canvas, ctx };
 }
 
 export function setCanvasSize (canvas: HTMLCanvasElement) {
@@ -93,15 +104,18 @@ export function scaleMeshV2 (mesh: v2[], factor: v2) {
 }
 
 export function cullString (str: string, cutoff: number) {
-    if (cutoff >= str.length)
+    if (cutoff >= str.length) {
         return str;
+    }
 
     let newStr = '';
-    for (let i = 0; i < cutoff; i++)
+    for (let i = 0; i < cutoff; i++) {
         newStr += str[i] || '';
+    }
 
-    if (newStr.length < str.length)
+    if (newStr.length < str.length) {
         newStr += '...';
+    }
 
     return newStr;
 }

@@ -8,38 +8,30 @@ Systems.systems.push({
     Start: (scene: Scene) => {
         Script.runStartMethodOnInit = true;
 
-        Scene.loopThroughAllScripts((script: Script, sprite: Entity) => {
+        Scene.loopThroughAllScripts((script: Script, entity: Entity) => {
             if (script.script === undefined) return;
             // assign properties from a Entity instance to be accessible by 'this' in scripts
-
-            /*
-            script.script.entity = sprite;
-            script.script.name = sprite.name;
-            script.script.transform = sprite.transform;
-
-             */
 
             let thisComponent: any = null;
 
             Scene.loopThroughAllScripts(script_ => {
-                if (Object.is(script.script, script_.script))
+                if (Object.is(script.script, script_.script)) {
                     thisComponent = script_;
+                }
             });
 
             if (!(thisComponent instanceof Script)) {
                 throw new Error(`Cannot find self on script with name ${script.name}!`);
             }
 
-            /*
-            script.script.component = thisComponent;
+            script.runMethod('Start', entity, []);
 
-            script.runMethod('Start', []);
-
-             */
         });
     },
 
     Update: (scene: Scene) => {
         scene.broadcast('Update', []);
-    }
+    },
+
+    order: 0
 });

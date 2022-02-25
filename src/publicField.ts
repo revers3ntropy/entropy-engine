@@ -27,7 +27,7 @@ export class publicField<T> {
     array: boolean;
     default: any;
 
-    constructor(config: publicFieldConfig<T>) {
+    constructor (config: publicFieldConfig<T>) {
         this.array = config.array || false;
         this.type = config.type || <publicFieldType> typeof config.value || 'string';
         this.value = config.value;
@@ -36,11 +36,14 @@ export class publicField<T> {
         this.default = config.default;
         this.assetType = config.assetType;
 
-        if (this.array)
+        if (this.array) {
             if (this.value) {
-                if (!Array.isArray(this.value))
+                if (!Array.isArray(this.value)) {
                     this.value = [this.value];
-            } else
+                }
+            } else {
                 this.value = [];
+            }
+        }
     }
 }

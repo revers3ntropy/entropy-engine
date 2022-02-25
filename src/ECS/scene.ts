@@ -5,7 +5,7 @@ import {colour, rgb} from "../util/colour";
 import {Script} from "../components/scriptComponent";
 import {getCanvasStuff} from "../util/general";
 
-export type sceneSettings = {
+export interface sceneSettings {
     // license + general
     license: string;
     version: string;
@@ -120,20 +120,22 @@ export class Scene {
 
     loopThroughScripts (handler: (script: Script, entity: Entity) => void) {
         for (const entity of this.entities) {
-            for (const script of entity.getComponents('Script'))
+            for (const script of entity.getComponents('Script')) {
                 handler(script as Script, entity as Entity);
+            }
         }
     }
     broadcast (funcName: string, params: any[]) {
         this.loopThroughScripts((script: Script, entity: Entity) => {
-            //script.runMethod(funcName, params);
+            script.runMethod(funcName, entity, params);
         });
     }
 
     static loopThroughAllScripts (handler: (script: Script, entity: Entity) => void) {
         Entity.loop(entity => {
-            for (const script of entity.getComponents('Script'))
+            for (const script of entity.getComponents('Script')) {
                 handler(script as Script, entity as Entity);
+            }
         });
     }
 

@@ -2,6 +2,12 @@ import {getCanvasSize, getCanvasStuff, sleep} from "../../util/general";
 import {rect, text} from "./basicShapes";
 import {v2} from "../../maths/maths";
 
+
+/**
+ * Draws the start animation. Resolves promise once animation has finished
+ * @param {string} canvasID
+ * @returns {Promise<void>}
+ */
 export async function startAnimation(canvasID: string) {
     const {canvas, ctx} = getCanvasStuff(canvasID);
 
