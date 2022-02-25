@@ -113,6 +113,8 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
 
     let scriptNode: ESNamespace | undefined;
 
+    const fileName: string = path.split('/').pop();
+
     try {
         let scriptData = await fetch(`${path}?${cacheBust}`);
         let code = await scriptData.text();
@@ -122,7 +124,6 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
         env.parent = global;
         env.path = path;
 
-        const fileName: string = path.split('/').pop();
 
         const n = new ESNamespace(new ESString(fileName), {});
 
@@ -150,10 +151,9 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
         const script = new Script({
             script: scriptNode,
             path,
-            name: scriptName,
+            name: fileName,
         });
         script.name = className;
-        script.scriptName = className;
 
         // set the values from the temp created when initialising the script
         for (let field of script?.script?.tempPublic || []) {

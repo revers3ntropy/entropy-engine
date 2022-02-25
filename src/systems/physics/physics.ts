@@ -1,3 +1,4 @@
+import {} from '../../../node_modules/@types/matter-js';
 import * as Matter from 'matter-js/build/matter';
 
 import {Systems} from "../../ECS/system";
