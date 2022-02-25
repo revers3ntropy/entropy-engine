@@ -1,5 +1,5 @@
-import {ESJSBinding} from 'entropy-script/src/runtime/primitives/esjsbinding';
-import * as Matter from 'matter-js';
+import {} from '../../../node_modules/@types/matter-js';
+import * as Matter from 'matter-js/build/matter';
 
 import {Systems} from "../../ECS/system";
 import {Scene} from "../../ECS/scene";
@@ -71,9 +71,8 @@ Systems.systems.push({
 
         } else throw Error('Unkown Collider type');
 
-        for (let vert of newVerts) {
-            //vert.body = mBody;
-        }
+        for (let vert of newVerts)
+            vert.body = mBody;
 
         mBody.vertices = newVerts;
         mBody.bounds = Matter.Bounds.create(mBody.vertices);
@@ -91,20 +90,21 @@ Systems.systems.push({
     },
 
     callCollides: function (entity: Entity, collidesWith: Entity) {
-        for (let script of entity.getComponents<Script>('Script')) {
-            script.runMethod(
-                'onCollision',
-                entity,
-                [new ESJSBinding(collidesWith)]
-            );
+        for (let component of entity.components) {
+            if (component.type === 'Script') {
+                /*
+                (component as Script)
+                    .runMethod('onCollision',
+                        [new N_any(collidesWith)]
+                    );
+                 */
+            }
         }
     },
 
     updateScripts: function (pairs: [Matter.Body, Entity][]) {
         const justMBodies = [];
-        for (let [mBody] of pairs) {
-            justMBodies.push(mBody);
-        }
+        for (let [mBody] of pairs) justMBodies.push(mBody);
 
         for (let [mBody, entity] of pairs) {
 

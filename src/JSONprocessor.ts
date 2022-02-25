@@ -7,6 +7,7 @@ import {Context} from 'entropy-script/src/runtime/context';
 import {global} from 'entropy-script/src/constants';
 import {ESNamespace, ESString} from 'entropy-script/src/runtime/primitiveTypes';
 import {run} from 'entropy-script/src';
+import {ESError} from 'entropy-script/src/errors';
 
 // all components
 import {CircleCollider, RectCollider} from './components/colliders';
@@ -28,11 +29,6 @@ Camera;
 
 const cacheBust = Math.floor(Math.random() * 200001);
 
-/**
- *
- * @param o
- * @returns {boolean}
- */
 function isV2(o: any) {
 
     if (!o) return false;
@@ -44,16 +40,10 @@ function isV2(o: any) {
     );
 }
 
-/**
- *
- * @param o
- * @returns {boolean}
- */
 function isV3(o: any) {
 
-    if (!o || !Array.isArray(o)){
-        return false;
-    }
+    if (!o) return false;
+    if (!Array.isArray(o)) return false;
 
     return (o.length === 3 &&
         typeof o[0] === 'number' &&
@@ -61,11 +51,6 @@ function isV3(o: any) {
         typeof o[2] === 'number')
 }
 
-/**
- *
- * @param o
- * @returns {boolean}
- */
 function isColour (o: any) {
     if (!o) return false;
     if (typeof o.r !== 'number') return false;
@@ -73,12 +58,6 @@ function isColour (o: any) {
     return typeof o.b === 'number';
 }
 
-/**
- *
- * @param propName
- * @param componentJSON
- * @param component
- */
 function componentPropProcessor (propName: any, componentJSON: any, component: Component | any) {
     // stop it overriding 'type'
     if (propName === 'type' || propName === 'subType') return;
@@ -107,11 +86,6 @@ function componentPropProcessor (propName: any, componentJSON: any, component: C
     component[propName] = componentJSON[propName];
 }
 
-/**
- *
- * @param transformJSON
- * @returns {{transform: Transform, parentInfo: any}}
- */
 function dealWithTransform (transformJSON: any) {
     let parentInfo = transformJSON['parent'];
 
@@ -130,27 +104,26 @@ function dealWithTransform (transformJSON: any) {
     return {parentInfo, transform};
 }
 
-/**
- *
- * @param componentJSON
- * @returns {Promise<Script | void>}
- */
-async function dealWithScriptComponent (componentJSON: any): Promise<Script | void> {
+async function dealWithScriptComponent (componentJSON: any): Promise<Script | void | ESError> {
+    // two parts to a script: path and name
     const path = componentJSON['path'];
+    // use either a specified name or the name of the file (found using some regex)
+    const className = componentJSON['name'] || componentJSON['className']
+    // gets name of file
 
     let scriptNode: ESNamespace | undefined;
-    let name = nameFromScriptURL(path);
+
+    const fileName: string = path.split('/').pop();
 
     try {
         let scriptData = await fetch(`${path}?${cacheBust}`);
         let code = await scriptData.text();
-
+        let name = nameFromScriptURL(path);
 
         const env = new Context();
         env.parent = global;
         env.path = path;
 
-        const fileName: string = path.split('/').pop();
 
         const n = new ESNamespace(new ESString(fileName), {});
 
@@ -178,32 +151,38 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
         const script = new Script({
             script: scriptNode,
             path,
-            name,
+            name: fileName,
         });
+        script.name = className;
 
-        // then override them with the saved values
-        if (!Array.isArray(componentJSON['public'])) {
-            return script;
+        // set the values from the temp created when initialising the script
+        for (let field of script?.script?.tempPublic || []) {
+            script.public.push(field);
         }
 
-        for (let field of componentJSON['public']) {
-            if (!script.hasPublic(field['name'])) continue;
+        // then override them with the saved values
+        if (Array.isArray(componentJSON['public'])) {
+            for (let field of componentJSON['public']) {
+                if (!script.hasPublic(field['name'])) continue;
 
-            let value = field['value'];
+                let value = field['value'];
 
-            if (field['type'] === 'v2')
-                value = v2.fromArray(field['value']);
-            else if (field['type'] === 'v3')
-                value = v3.fromArray(field['value']);
+                if (field['type'] === 'v2')
+                    value = v2.fromArray(field['value']);
+                else if (field['type'] === 'v3')
+                    value = v3.fromArray(field['value']);
 
-            script.setPublic(field['name'], value);
+                script.setPublic(field['name'], value);
+
+            }
         }
 
         return script;
 
     } catch (E) {
-        throw `Error initialising script '${componentJSON['name'] || 'unnamed script'}': ${E}`;
+        console.error(`Error initialising script '${componentJSON['name'] || 'unnamed script'}': ${E}`);
     }
+    return;
 }
 
 async function componentProcessor(componentJSON: any): Promise<Component|void> {
@@ -230,12 +209,10 @@ async function componentProcessor(componentJSON: any): Promise<Component|void> {
     return component;
 }
 
-/**
- * Needs MUCH more error checking as you can pass anything as the JSON into it
- * @param JSON
- * @returns {Promise<{parentInfo: any, entity: Entity}>}
- */
 export async function getEntityFromJSON (JSON: any) {
+    /*
+        Needs MUCH more error checking as you can pass anything as the JSON into it
+     */
     const name: string = JSON['name'] ?? `entity ${Entity.entities.length}`;
     const tag: string = JSON['tag'] ?? 'entity';
     const Static: boolean = JSON['Static'] ?? false;
@@ -249,9 +226,8 @@ export async function getEntityFromJSON (JSON: any) {
     for (let componentJSON of componentsJSON) {
         const component = await componentProcessor(componentJSON);
 
-        if (component) {
+        if (component)
             components.push(component);
-        }
     }
 
     return {
