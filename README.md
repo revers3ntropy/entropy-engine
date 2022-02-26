@@ -1,3 +1,6 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/entropy-games/entropy-engine/badge)](https://www.codefactor.io/repository/github/entropy-games/entropy-engine)
+[![NPMVersion](https://badge.fury.io/js/entropy-engine.svg)](http://badge.fury.io/js/entropy-engine)
+
 # TypeScript Game Engine for the HTML5 canvas
 
 To use the engine  run `npm i entropy-engine`, or download the source files.
@@ -592,9 +595,6 @@ Some properties are added to `this` on construction:
 # Example Game: Pong
 
 This is a very simple Pong game:
-
-![pong example](https://revers3ntropy.com/ess/entropy-engine-jc/README-pong.png)
-[*(play here!)*](https://revers3ntropy.com/ess/ee-test-pong/)
 
 index.js:
 ```js
