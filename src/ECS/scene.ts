@@ -1,6 +1,6 @@
 import {Entity} from './entity';
 import {Camera} from "../components/camera";
-import {v3} from "../maths/maths";
+import {v3} from "../maths/v3";
 import {colour, rgb} from "../util/colour";
 import {Script} from "../components/scriptComponent";
 import {getCanvasStuff} from "../util/general";
@@ -125,7 +125,7 @@ export class Scene {
             }
         }
     }
-    broadcast (funcName: string, params: any[]) {
+    broadcast (funcName: string, params: any[] = []) {
         this.loopThroughScripts((script: Script, entity: Entity) => {
             script.runMethod(funcName, entity, params);
         });

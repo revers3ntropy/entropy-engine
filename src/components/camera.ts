@@ -1,20 +1,13 @@
 import {Component} from "../ECS/component";
 import {v2, v3} from "../maths/maths";
 import {getCanvasSize, getZoomScaledPosition, JSONifyComponent} from "../util/general";
-import {Entity} from "../ECS/entity";
+import type {Entity} from "../ECS/entity";
 
 export class Camera extends Component {
-    // @ts-ignore
-    zoom: number;
-
-    // @ts-ignore
-    far: number;
-
-    // @ts-ignore
-    near: number;
-
-    // @ts-ignore
-    fov: number;
+    zoom = 1;
+    far = 1000;
+    near = 0.1;
+    fov = 90;
 
     constructor({
         zoom = 1,
@@ -77,7 +70,5 @@ export class Camera extends Component {
     }
 
     // STATIC
-
-    // actually of type Entity
     static main: Entity;
 }

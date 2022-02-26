@@ -2,7 +2,7 @@ import {Camera} from '../../components/camera';
 import {Entity} from '../../ECS/entity';
 import {getCanvasSize} from '../../util/general';
 import {circle, rect, image, rotateAroundPointWrapper} from './basicShapes';
-import {v2} from '../../maths/maths';
+import {v2} from '../../maths/v2';
 import {CircleCollider, RectCollider, Collider } from '../../components/colliders';
 import { Transform } from '../../components/transform';
 
@@ -18,7 +18,7 @@ function getGlobalGrid (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement
     const zoom = cameraC.zoom;
     const canvasSize = getCanvasSize(canvas);
 
-    // find nearest order of magnitude
+    // find the nearest order of magnitude
     let order = Math.floor(Math.log(zoom) / Math.LN10
         + 0.000000001); // because float math sucks like that
     const zoomToNearestPow = Math.pow(10,order);

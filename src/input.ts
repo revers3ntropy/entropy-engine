@@ -1,4 +1,4 @@
-import {v2} from "./maths/maths";
+import {v2} from "./maths/v2";
 import {Entity} from "./ECS/entity";
 import {GUIElement, GUITextBox} from "./components/gui/gui";
 import {Camera} from "./components/camera";

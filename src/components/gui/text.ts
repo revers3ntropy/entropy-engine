@@ -5,21 +5,15 @@ import {text} from '../../systems/rendering/basicShapes'
 import {v2} from "../../maths/v2";
 
 export class GUIText extends GUIElement {
-    // @ts-ignore
-    text: string;
-    // @ts-ignore
-    fontSize: number;
-    // @ts-ignore
-    font: string;
-    // @ts-ignore
-    colour: colour;
-    // @ts-ignore
-    alignment: string;
-    // @ts-ignore
-    fill: boolean;
+    text = '';
+    fontSize = 0;
+    font = '';
+    colour = rgb();
+    alignment = '';
+    fill = false;
 
     constructor ({
-         text = 'text',
+         text = '',
          fontSize = 12,
          font = 'Arial',
          colour = rgb(0, 0, 0),
@@ -32,7 +26,7 @@ export class GUIText extends GUIElement {
         this.addPublic({
             name: 'text',
             value: text,
-            default: 'text'
+            default: ''
         });
         this.addPublic({
             name: 'fontSize',

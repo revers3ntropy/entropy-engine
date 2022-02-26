@@ -77,7 +77,7 @@ export abstract class Component {
         return field;
     }
 
-    public getPublic (name: string): any | undefined {
+    public getPublic<T>(name: string): T | undefined {
         for (let field of this.public) {
             if (field.name === name) {
                 return field.value;

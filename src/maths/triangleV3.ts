@@ -22,8 +22,8 @@ export class TriangleV3 {
     }
 
     get clone() {
-        // @ts-ignore
-        return new TriangleV3(...this.points.map(p => p.clone));
+        // cast to tuple before
+        return new TriangleV3(... <[v3, v3, v3]> this.points.map(p => p.clone));
     }
 
     get triangleV2() {

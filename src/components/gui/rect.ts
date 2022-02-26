@@ -5,14 +5,10 @@ import {GUIElement} from "./gui";
 import {v2} from "../../maths/v2";
 
 export class GUIRect extends GUIElement {
-    // @ts-ignore
-    width: number;
-    // @ts-ignore
-    height: number;
-    // @ts-ignore
-    colour: colour;
-    // @ts-ignore
-    radius: number
+    width = 0;
+    height = 0;
+    colour = rgb();
+    radius = 0;
 
     constructor ({
          zLayer = 1,

@@ -6,10 +6,8 @@ import {polygonCollidingWithPoint, v2} from "../../maths/maths";
 import {GUIElement} from "./gui";
 
 export class GUIPolygon extends GUIElement {
-    // @ts-ignore
-    colour: colour;
-    // @ts-ignore
-    points: v2[];
+    colour = rgb();
+    points: v2[] = [];
 
     constructor ({
          zLayer = 1,

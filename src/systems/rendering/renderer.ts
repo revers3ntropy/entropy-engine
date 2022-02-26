@@ -121,6 +121,7 @@ export function renderAll (entities: Entity[], canvas: HTMLCanvasElement, ctx: C
 
 Systems.systems.push({
     name: 'Renderer',
+
     Start: () => {},
 
     Update: (scene: Scene) => {
@@ -130,5 +131,6 @@ Systems.systems.push({
         }
         renderAll(scene.entities, ctx.canvas, ctx, scene.settings.backgroundTint, scene.settings.backgroundImage);
     },
+
     order: 10
 });

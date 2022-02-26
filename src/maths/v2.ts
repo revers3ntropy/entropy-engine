@@ -75,11 +75,13 @@ export class v2 {
      */
     div (v: v2): v2 {
 
-        if (v.x !== 0)
+        if (v.x !== 0) {
             this.x /= v.x;
+        }
 
-        if (v.y !== 0)
+        if (v.y !== 0) {
             this.y /= v.y;
+        }
 
         return this;
     }
@@ -113,10 +115,7 @@ export class v2 {
      * @returns {number}
      */
     get magnitude (): number {
-        return Math.sqrt(
-            this.x ** 2 +
-            this.y ** 2
-        );
+        return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
 
     /**
@@ -126,10 +125,11 @@ export class v2 {
     normalise (): v2 {
         const m = this.magnitude;
 
-        if (m !== 0)
+        if (m !== 0) {
             this.scale(1/m);
-        else
+        } else {
             console.error(`Cannot normalise vector with magnitude 0`);
+        }
 
         return this;
     }

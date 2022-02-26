@@ -8,19 +8,18 @@ export class GUITextBox extends GUIElement {
     text: GUIText;
     selected: boolean;
     limiter: (val: string) => string;
-    // @ts-ignore
-    maxLength: number;
+    maxLength = 0;
 
     constructor ({
-     zLayer = 1,
-     initialText = 'text',
-     fontSize = 12,
-     font = 'Arial',
-     textColour = rgb(0, 0, 0),
-     textAlignment = 'center',
-     fillText = true,
-     limiter = (val: string) => val,
-     maxLength = 100
+        zLayer = 1,
+        initialText = 'text',
+        fontSize = 12,
+        font = 'Arial',
+        textColour = rgb(0, 0, 0),
+        textAlignment = 'center',
+        fillText = true,
+        limiter = (val: string) => val,
+        maxLength = 100
     }) {
         super('GUITextBox', zLayer);
 

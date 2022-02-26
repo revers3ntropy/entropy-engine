@@ -1,33 +1,22 @@
 import {Component} from '../ECS/component';
-import type {Entity} from '../ECS/entity.js';
+import type {Entity} from '../ECS/entity';
 import { v2, v3 } from '../maths/maths';
-import {global} from 'entropy-script/src/constants';
 
-import {Primitive, ESNamespace, ESFunction} from 'entropy-script/src/runtime/primitiveTypes';
-import {ESJSBinding} from 'entropy-script/src/runtime/primitives/esjsbinding';
-import {ESString} from 'entropy-script/src/runtime/primitiveTypes';
+import {global, Primitive, ESNamespace, ESFunction, ESJSBinding, ESString} from 'entropy-script/src';
 
 export class Script extends Component {
-    static runStartMethodOnInit = false;
-
     script: ESNamespace | undefined;
     name = '';
     path: string;
 
-    constructor ({path, name, entity, script}: {
+    constructor ({path, script}: {
         path: string,
-        name: string,
-        entity?: Entity,
         script?: ESNamespace
     }) {
-        super("Script", name || 'noscript')
+        super("Script", path.split('/').pop() || 'noscript')
         this.path = path;
 
         this.script = script;
-
-        if (Script.runStartMethodOnInit) {
-            this.runMethod('Start', entity, []);
-        }
     }
 
     public jsonPublic (): object[] {

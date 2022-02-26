@@ -1,5 +1,4 @@
-import {} from '../../../node_modules/@types/matter-js';
-import * as Matter from 'matter-js/build/matter';
+import * as Matter from 'matter-js';
 
 import {Systems} from "../../ECS/system";
 import {Scene} from "../../ECS/scene";
@@ -71,8 +70,9 @@ Systems.systems.push({
 
         } else throw Error('Unkown Collider type');
 
-        for (let vert of newVerts)
-            vert.body = mBody;
+        for (let vert of newVerts) {
+            //vert.body = mBody;
+        }
 
         mBody.vertices = newVerts;
         mBody.bounds = Matter.Bounds.create(mBody.vertices);
@@ -81,11 +81,11 @@ Systems.systems.push({
         if (entity.Static) {
             mBody.velocity = Matter.Vector.create(0, 0);
             mBody.force = Matter.Vector.create(0, 0);
-            mBody.positionPrev = mBody.position;
+            //mBody.positionPrev = mBody.position;
         }
 
         if (isStart) {
-            mBody.positionPrev = mBody.position;
+            //mBody.positionPrev = mBody.position;
         }
     },
 

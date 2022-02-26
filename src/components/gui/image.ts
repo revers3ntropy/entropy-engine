@@ -4,12 +4,9 @@ import {GUIElement} from "./gui";
 import {v2} from "../../maths/v2";
 
 export class GUIImage extends GUIElement {
-    // @ts-ignore
-    width: number;
-    // @ts-ignore
-    height: number;
-    // @ts-ignore
-    url: string;
+    width = 0;
+    height = 0;
+    url = '';
 
     constructor ({
          zLayer = 1,
@@ -35,10 +32,13 @@ export class GUIImage extends GUIElement {
         });
     }
 
-    Start (transform: Transform) {}
+    Start () {}
     Update () {}
 
     draw (ctx: CanvasRenderingContext2D, transform: Transform): void {
+        if (!this.url) {
+            return;
+        }
         const width = this.width * transform.scale.x;
         const height = this.height * transform.scale.y;
 

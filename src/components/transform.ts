@@ -4,15 +4,11 @@ import { Entity } from "../ECS/entity";
 import {Scene} from "../ECS/scene";
 
 export class Transform extends Component {
-    // @ts-ignore
-    position: v3;
-    // @ts-ignore
-    scale: v3;
-    // @ts-ignore
-    rotation: v3;
+    position = v3.zero;
+    scale = new v3(1);
+    rotation = v3.zero;
 
-    // @ts-ignore
-    parent: Transform | number;
+    parent: Transform | number = 0;
 
     constructor({
         position = v3.zero,
@@ -28,10 +24,16 @@ export class Transform extends Component {
             value: position,
             type: 'v3',
             overrideGet: () => {
-                if (typeof this.parent === 'number')
-                    return this.getPublic('position');
+                if (typeof this.parent === 'number') {
+                    return this.getPublic<v3>('position') || v3.zero;
+                }
                 
-                return this.getPublic('position').clone.add(this.parent.position);
+                const pos = this.getPublic<v3>('position');
+                if (!pos) {
+                    return v3.zero;
+                }
+                return pos.add(this.parent.position);
+
             },
             overrideSet: (v: v3) => {
                 const p = v || v3.zero;
@@ -47,10 +49,16 @@ export class Transform extends Component {
             value: rotation,
             type: 'v3',
             overrideGet: () => {
-                if (typeof this.parent === 'number')
-                    return this.getPublic('rotation');
+                if (typeof this.parent === 'number') {
+                    return this.getPublic<v3>('rotation') || v3.zero;
+                }
+
+                const rot = this.getPublic<v3>('rotation');
+                if (!rot) {
+                    return v3.zero;
+                }
                 
-                return this.getPublic('rotation').clone.add(this.parent.rotation);
+                return rot.clone.add(this.parent.rotation);
             },
             overrideSet: (v: v3) => {
                 const r = v || v3.zero;
@@ -65,15 +73,20 @@ export class Transform extends Component {
             value: scale,
             type: 'v3',
             overrideGet: () => {
-                if (typeof this.parent === 'number')
-                    return this.getPublic('scale');
-                
-                return this.getPublic('scale').clone.mul(this.parent.scale);
+                if (typeof this.parent === 'number') {
+                    return this.getPublic<v3>('scale') || new v3(1);
+                }
+
+                const scale = this.getPublic<v3>('scale');
+                if (!scale) {
+                    return v3.zero;
+                }
+                return scale.add(this.parent.scale);
             },
             overrideSet: (v: v3) => {
                 const s = v || v3.zero;
-                s.x ??= 0;
-                s.y ??= 0;
+                s.x ??= 1;
+                s.y ??= 1;
                 this.setPublic('scale', s);
             }
         });
@@ -137,7 +150,7 @@ export class Transform extends Component {
     
 
     get localRotation () {
-        return this.getPublic('rotation');
+        return this.getPublic('rotation') || new v3(1);
     }
 
     set localRotation (v: v3) {
@@ -145,7 +158,7 @@ export class Transform extends Component {
     }
 
     get localPosition () {
-        return this.getPublic('position');
+        return this.getPublic('position') || v3.zero;
     }
 
     set localPosition (v: v3) {
@@ -153,7 +166,7 @@ export class Transform extends Component {
     }
 
     get localScale () {
-        return this.getPublic('scale');
+        return this.getPublic('scale') || v3.zero;
     }
 
     set localScale (v: v3) {
@@ -193,9 +206,11 @@ export class Transform extends Component {
     get childCount (): number {
         let count = 0;
 
-        for (let sprite of Entity.entities)
-            if (Object.is(sprite.transform.parent, this))
+        for (let sprite of Entity.entities) {
+            if (Object.is(sprite.transform.parent, this)) {
                 count++;
+            }
+        }
 
         return count;
     }
@@ -223,8 +238,9 @@ export class Transform extends Component {
 
     get root (): Transform {
         function findNextRoot (t: Transform): Transform {
-            if (typeof t.parent === 'number')
+            if (typeof t.parent === 'number') {
                 return t;
+            }
 
             return findNextRoot(t.parent);
         }
@@ -233,7 +249,11 @@ export class Transform extends Component {
     }
 
     get scene (): Scene {
-        return Scene.sceneByID( <number> this.root.parent);
+        const scene = this.root.parent;
+        if (typeof scene !== 'number') {
+            throw 'root is not scene';
+        }
+        return Scene.sceneByID(scene);
     }
 
     get forwards (): v3 {

@@ -12,20 +12,22 @@ import {ESError} from 'entropy-script/src/errors';
 // all components
 import {CircleCollider, RectCollider} from './components/colliders';
 import {Body} from './components/body';
-import {CircleRenderer, ImageRenderer2D, RectRenderer, MeshRenderer} from './components/renderComponents';
+import {CircleRenderer, ImageRenderer2D, RectRenderer} from './components/renderers2D';
 import {GUIBox, GUICircle, GUIImage, GUIPolygon, GUIRect, GUIText, GUITextBox} from './components/gui/gui';
 import {Camera} from './components/camera';
 import { Transform} from "./components/transform";
 import {defaultSceneSettings, Scene, sceneSettings} from './ECS/scene';
 import {rgba} from "./util/colour";
-import {nameFromScriptURL} from './util/general';
 
 // reference everything so the ts compiler will think that it is being used and wont delete the import
-CircleCollider; RectCollider;
-Body;
-CircleRenderer; RectRenderer; ImageRenderer2D; MeshRenderer;
-GUIBox; GUIText; GUITextBox; GUIRect; GUICircle; GUIPolygon; GUIImage;
-Camera;
+
+const components: {[k: string]: new (...args: any[]) => Component} = {
+    CircleCollider, RectCollider,
+    Body,
+    CircleRenderer, RectRenderer, ImageRenderer2D,
+    GUIBox, GUIText, GUITextBox, GUIRect, GUICircle, GUIPolygon, GUIImage,
+    Camera
+}
 
 const cacheBust = Math.floor(Math.random() * 200001);
 
@@ -104,61 +106,46 @@ function dealWithTransform (transformJSON: any) {
     return {parentInfo, transform};
 }
 
-async function dealWithScriptComponent (componentJSON: any): Promise<Script | void | ESError> {
+async function dealWithScriptComponent (componentJSON: any): Promise<Script | void> {
     // two parts to a script: path and name
     const path = componentJSON['path'];
-    // use either a specified name or the name of the file (found using some regex)
-    const className = componentJSON['name'] || componentJSON['className']
-    // gets name of file
 
     let scriptNode: ESNamespace | undefined;
 
     const fileName: string = path.split('/').pop();
+    
+    let scriptData = await fetch(`${path}?${cacheBust}`);
+    let code = await scriptData.text();
 
-    try {
-        let scriptData = await fetch(`${path}?${cacheBust}`);
-        let code = await scriptData.text();
-        let name = nameFromScriptURL(path);
-
-        const env = new Context();
-        env.parent = global;
-        env.path = path;
+    const env = new Context();
+    env.parent = global;
+    env.path = path;
 
 
-        const n = new ESNamespace(new ESString(fileName), {});
+    const n = new ESNamespace(new ESString(fileName), {});
 
-        const res = run(code, {
-            env,
-            measurePerformance: false,
-            fileName,
-            currentDir: path,
-        });
+    const res = run(code, {
+        env,
+        measurePerformance: false,
+        fileName,
+        currentDir: path,
+    });
 
-        n.__value__ = env.getSymbolTableAsDict();
+    n.__value__ = env.getSymbolTableAsDict();
 
-        if (res.error) {
-            console.log(res.error.str);
-            return;
-        }
-
-        scriptNode = n;
-    } catch (e) {
-        console.error(`Script Error: ${e}`);
+    if (res.error) {
+        console.log(res.error.str);
         return;
     }
+
+    scriptNode = n;
+    
     // evaluate the script name as JS code, like when instantiating the component
     try {
         const script = new Script({
             script: scriptNode,
-            path,
-            name: fileName,
+            path
         });
-        script.name = className;
-
-        // set the values from the temp created when initialising the script
-        for (let field of script?.script?.tempPublic || []) {
-            script.public.push(field);
-        }
 
         // then override them with the saved values
         if (Array.isArray(componentJSON['public'])) {
@@ -167,10 +154,11 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
 
                 let value = field['value'];
 
-                if (field['type'] === 'v2')
+                if (field['type'] === 'v2') {
                     value = v2.fromArray(field['value']);
-                else if (field['type'] === 'v3')
+                } else if (field['type'] === 'v3') {
                     value = v3.fromArray(field['value']);
+                }
 
                 script.setPublic(field['name'], value);
 
@@ -180,9 +168,8 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
         return script;
 
     } catch (E) {
-        console.error(`Error initialising script '${componentJSON['name'] || 'unnamed script'}': ${E}`);
+        throw `Error initialising script '${fileName}': ${E}`;
     }
-    return;
 }
 
 async function componentProcessor(componentJSON: any): Promise<Component|void> {
@@ -192,16 +179,16 @@ async function componentProcessor(componentJSON: any): Promise<Component|void> {
         return dealWithScriptComponent(componentJSON);
     }
 
-    // dynamically generate component from class
-    try {
-        component = new (eval(componentJSON['type']))({});
-    } catch (E) {
-        console.error(`Couldn't create component ${componentJSON}: ${E}`);
-        return;
+    const componentType = components[componentJSON['type']];
+    if (!componentType) {
+        throw `No component of type '${componentJSON['type']}' found`;
     }
+    component = new (componentType)({});
 
     for (let prop in componentJSON) {
-        if (!componentJSON.hasOwnProperty(prop)) continue;
+        if (!componentJSON.hasOwnProperty(prop)) {
+            continue;
+        }
 
         componentPropProcessor(prop, componentJSON, component);
     }
@@ -226,8 +213,9 @@ export async function getEntityFromJSON (JSON: any) {
     for (let componentJSON of componentsJSON) {
         const component = await componentProcessor(componentJSON);
 
-        if (component)
+        if (component) {
             components.push(component);
+        }
     }
 
     return {

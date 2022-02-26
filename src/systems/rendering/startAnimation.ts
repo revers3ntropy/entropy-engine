@@ -1,7 +1,6 @@
 import {getCanvasSize, getCanvasStuff, sleep} from "../../util/general";
 import {rect, text} from "./basicShapes";
-import {v2} from "../../maths/maths";
-
+import {v2} from "../../maths/v2";
 
 /**
  * Draws the start animation. Resolves promise once animation has finished

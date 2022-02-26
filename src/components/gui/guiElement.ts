@@ -1,6 +1,6 @@
 import {Component} from "../../ECS/component";
 import {Transform} from "../transform";
-import {v2} from "../../maths/maths";
+import {v2} from "../../maths/v2";
 import {JSONifyComponent} from "../../util/general";
 
 export abstract class GUIElement extends Component {
@@ -8,9 +8,8 @@ export abstract class GUIElement extends Component {
     abstract draw (ctx: CanvasRenderingContext2D, transform: Transform): void;
     abstract touchingPoint (point: v2, ctx: CanvasRenderingContext2D, transform: Transform): boolean;
 
-    hovered: boolean;
-    // @ts-ignore
-    zLayer: number;
+    hovered = false;
+    zLayer = 0;
 
     protected constructor (subtype: string, zLayer: number) {
         super('GUIElement', subtype);

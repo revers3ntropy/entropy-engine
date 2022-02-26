@@ -9,7 +9,7 @@ export class MeshV2 {
         this.triangles = Triangles;
     }
 
-    move(by: v2) {
+    move (by: v2) {
         for (const tri of this.triangles) {
             tri.move(by);
         }

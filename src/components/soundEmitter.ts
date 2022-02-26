@@ -2,10 +2,8 @@ import {Component} from "../ECS/component";
 import {Transform} from "./transform";
 
 export class soundEmitter extends Component {
-    // @ts-ignore
-    src: string;
-
-    sound: any;
+    src = '';
+    sound: HTMLAudioElement;
 
     constructor (config: {
         src: string
@@ -17,7 +15,7 @@ export class soundEmitter extends Component {
             value: config.src,
         });
 
-        this.sound = document.createElement("audio");
+        this.sound = document.createElement<'audio'>("audio");
         this.sound.src = config.src;
         this.sound.setAttribute("preload", "auto");
         this.sound.setAttribute("controls", "none");
@@ -29,9 +27,7 @@ export class soundEmitter extends Component {
 
     }
 
-    Update (transform: Transform): void {
-
-    }
+    Update (): void {}
 
     play () {
         this.sound.play();

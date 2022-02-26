@@ -1,4 +1,4 @@
-import {v3} from "../maths/maths";
+import {v3} from "../maths/v3";
 import {Component} from "../ECS/component";
 import {JSONifyComponent} from "../util/general";
 

@@ -72,7 +72,7 @@ export class colour {
     }
 }
 
-export function rgb (red: number, green: number, blue: number): colour {
+export function rgb (red=0, green=red, blue=red): colour {
     return new colour(red, green, blue);
 }
 

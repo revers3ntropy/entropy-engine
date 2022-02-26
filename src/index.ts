@@ -2,7 +2,7 @@ import { Entity } from "./ECS/entity"
 import { startAnimation } from "./systems/rendering/startAnimation"
 import { Script } from './components/scriptComponent'
 import {Collider} from './components/colliders'
-import { license } from "./license"
+import license from "./license"
 import {getMousePos, input, setMousePos} from "./input"
 import { GUIElement, GUITextBox } from "./components/gui/gui"
 import { entitiesFromJSON, initialiseScenes } from './JSONprocessor'
@@ -15,7 +15,7 @@ import {Transform} from "./components/transform";
 import {RectCollider, CircleCollider} from "./components/colliders";
 import { v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3 } from './maths/maths'
 import { Body } from "./components/body"
-import { CircleRenderer, RectRenderer, ImageRenderer2D, MeshRenderer } from './components/renderComponents'
+import { CircleRenderer, RectRenderer, ImageRenderer2D } from './components/renderers2D'
 import { GUIBox, GUIText, GUIRect, GUICircle, GUIPolygon, GUIImage } from './components/gui/gui'
 
 import {init as initEES} from './scripting/scripts'
@@ -31,7 +31,7 @@ export {
     CircleCollider, RectCollider,
     v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3,
     Body,
-    CircleRenderer, RectRenderer, ImageRenderer2D, MeshRenderer,
+    CircleRenderer, RectRenderer, ImageRenderer2D,
     GUIBox, GUIText, GUITextBox, GUIRect, GUICircle, GUIPolygon, GUIImage,
     input,
     Camera,
@@ -125,23 +125,23 @@ export default function entropyEngine ({
         input.mouseDown = false;
         setMousePos(evt, canvas);
 
-        Scene.activeScene.loopThroughScripts((script, sprite) => {
-            if (!(sprite.sceneID === Scene.active)) return;
-            if (sprite.hasComponent('Collider')){
+        Scene.activeScene.loopThroughScripts((script, entity) => {
+            if (!(entity.sceneID === Scene.active)) return;
+            if (entity.hasComponent('Collider')){
 
-                let collider = sprite.getComponent<Collider>('Collider');
+                let collider = entity.getComponent<Collider>('Collider');
                 const mousePos = getMousePos(canvas, evt);
 
-                if (!collider.overlapsPoint(sprite.transform, mousePos)) {
+                if (!collider.overlapsPoint(entity.transform, mousePos)) {
                     return;
                 }
 
-                //script.runMethod('onMouseUp', []);
+                script.runMethod('onMouseUp', entity, []);
 
-            } else if (sprite.hasComponent('GUIElement')) {
-                const ui = sprite.getComponent<GUIElement>('GUIElement');
+            } else if (entity.hasComponent('GUIElement')) {
+                const ui = entity.getComponent<GUIElement>('GUIElement');
                 if (ui.hovered) {
-                    //script.runMethod('onClick', []);
+                    script.runMethod('onClick', entity, []);
                 }
 
                 if (ui.subtype !== 'GUITextBox') return;
@@ -159,8 +159,9 @@ export default function entropyEngine ({
         if (licenseLevel < 2)
             await startAnimation(canvasID);
 
-        if (shouldInitEES)
-            initEES();
+        if (shouldInitEES) {
+            await initEES();
+        }
 
         Scene.activeScene.findMainCamera();
 

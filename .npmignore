@@ -1,3 +1,5 @@
 build.js
 webpack.log
 .gitattributes
+webpack.config.js
+/test/

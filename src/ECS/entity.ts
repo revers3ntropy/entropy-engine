@@ -33,7 +33,7 @@ export class Entity {
     getComponent = <T extends Component> (type: string, subType = ''): T => {
 
         if (!(this instanceof Entity)) {
-            throw new Error(`Running getComponent method in invalid context. this: ${this}`);
+            throw `Running getComponent method in invalid context. this: ${this}`;
         }
 
         if (type.toLowerCase() === 'transform') {
@@ -47,13 +47,13 @@ export class Entity {
         ) || c.subtype === type);
 
         // as scripts are going to be handled differently, check them next
-        if (component === undefined)
-            component = this.getComponents('Script').find(c =>
-                c.subtype === subType || c.subtype === type
-            )
+        if (component === undefined) {
+            component = this.getComponents('Script')
+                .find(c => c.subtype === subType || c.subtype === type)
+        }
 
         if (component === undefined) {
-            throw new Error(`Cannot find component of type ${type} on entity ${this.name}`);
+            throw `Cannot find component of type ${type} on entity ${this.name}`;
         }
 
         return component as T;
@@ -67,33 +67,12 @@ export class Entity {
         return entity;
     };
 
-    addComponent = (toAdd: Component ) => {
+    addComponent = (toAdd: Component) => {
         /*
             Checks if the component is viable on the entity, and if it is not,
             then refuses to add it or overrides the problematic component.
             For example, if you try to add a rectRenderer while a CircleRenderer already exists,
             the CircleRenderer will be deleted and then the RectRenderer will be added
-         */
-        /*
-        if (!(toAdd instanceof Component)) {
-            if (toAdd instanceof ESBehaviourInstance) {
-                for (let component of this.components) {
-                    if (Object.is(component, toAdd)) {
-                        return false;
-                    }
-                }
-
-                toAdd.entity = this;
-                this.components.push(new Script({
-                    script: toAdd
-                }));
-                return true;
-            }
-
-            console.error(`Cannot add component: `, toAdd);
-            return false;
-        }
-
          */
         if (toAdd.type === 'transform') {
             return false;

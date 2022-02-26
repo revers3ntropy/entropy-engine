@@ -1,30 +1,28 @@
 {
-  "name": "entropy-engine",
-  "version": "0.0.1",
-  "description": "TypeScript Game Engine",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/revers3ntropy/entropy-engine.git"
-  },
-  "keywords": [
-    "typescript",
-    "game engine",
-    "web"
-  ],
-  "author": "revers3ntropy",
-  "bugs": {
-    "url": "https://github.com/revers3ntropy/entropy-engine/issues"
-  },
-  "homepage": "https://entropyengine.dev",
-  "dependencies": {
-    "entropy-script": "^2.8.2",
-    "matter-js": "^0.18.0"
-  },
-  "devDependencies": {
-    "@types/matter-js": "^0.17.7",
-    "ts-loader": "^9.2.6",
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2"
-  }
+    "name": "entropy-engine",
+    "version": "0.0.3",
+    "description": "TypeScript Game Engine",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/revers3ntropy/entropy-engine.git"
+    },
+    "keywords": [
+        "typescript",
+        "game engine",
+        "web"
+    ],
+    "author": "revers3ntropy",
+    "bugs": {
+        "url": "https://github.com/revers3ntropy/entropy-engine/issues"
+    },
+    "homepage": "https://entropyengine.dev",
+    "dependencies": {
+        "@types/matter-js": "^0.17.7",
+        "entropy-script": "^2.8.3-a",
+        "matter-js": "^0.18.0",
+        "ts-loader": "^9.2.6",
+        "webpack": "^5.69.1",
+        "webpack-cli": "^4.9.2"
+    }
 }

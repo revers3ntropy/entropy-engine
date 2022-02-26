@@ -1,33 +1,26 @@
-import {rgb} from "../../util/colour";
+import { colour, rgb } from "../../util/colour";
 import {Transform} from "../transform";
 import {roundedRect} from "../../systems/rendering/basicShapes";
 import {GUIElement} from "./gui";
 import {v2} from "../../maths/v2";
 
 export class GUIBox extends GUIElement {
-    Start(transform: Transform): void {}
-    // @ts-ignore
-    height: number;
-    // @ts-ignore
-    width: number;
-    // @ts-ignore
-    radius: number;
-    // @ts-ignore
-    innerColour: colour;
-    // @ts-ignore
-    outerColour: colour;
-    // @ts-ignore
-    borderThickness: number;
+    height = 0;
+    width = 0;
+    radius = 0;
+    innerColour = rgb();
+    outerColour = rgb();
+    borderThickness = 0;
 
     constructor ({
-                     height = 30,
-                     width = 60,
-                     radius = 0,
-                     innerColour = rgb(230, 230, 230),
-                     outerColour = rgb(90,90,90),
-                     borderThickness = 1,
-                     zLayer = 1,
-                 }) {
+         height = 30,
+         width = 60,
+         radius = 0,
+         innerColour = rgb(230, 230, 230),
+         outerColour = rgb(90,90,90),
+         borderThickness = 1,
+         zLayer = 1,
+     }) {
         super('GUIBox', zLayer);
 
         this.addPublic({
@@ -69,6 +62,8 @@ export class GUIBox extends GUIElement {
             default: 1
         });
     }
+
+    Start() {}
 
     draw (ctx: CanvasRenderingContext2D, transform: Transform) {
         if (this.width === 0 || this.height === 0) return;

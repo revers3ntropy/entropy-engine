@@ -1,8 +1,7 @@
-import {} from '../../node_modules/@types/matter-js';
-import * as Matter from 'matter-js/build/matter';
+import * as Matter from 'matter-js';
 
 import { Component } from "../ECS/component"
-import {v2} from "../maths/maths"
+import {v2} from "../maths/v2"
 import {Transform} from "../index";
 
 export abstract class Collider extends Component {

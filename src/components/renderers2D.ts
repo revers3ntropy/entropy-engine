@@ -1,24 +1,31 @@
-import {v2} from "../maths/maths";
+import {v2} from "../maths/v2";
 import {circle, image, rect} from "../systems/rendering/basicShapes";
 import {getZoomScaledPosition, JSONifyComponent} from '../util/general'
 import {colour, rgb, rgba} from "../util/colour";
 import { Transform } from "./transform";
 import { Renderer } from "./renderer";
 
+type drawArgs = {
+    position: v2,
+    transform: Transform,
+    ctx: CanvasRenderingContext2D,
+    zoom: number,
+    center: v2
+};
+
 export abstract class Renderer2D extends Renderer {
-    abstract draw (arg: {position: v2, transform: Transform, ctx: CanvasRenderingContext2D, zoom: number, center: v2}): void;
-    
-    // @ts-ignore
-    offset: v2;
+    abstract draw (arg: drawArgs): void;
+
+    offset: v2 = v2.zero;
     
     protected constructor(type: string, offset: v2) {
-        super(type, true);
+        super(type);
 
         this.addPublic({
             name: 'offset',
             value: offset,
             type: 'v2',
-            description: 'offset from entities transform'
+            description: 'offset from entity\'s transform\s position'
         });
     }
 
@@ -30,15 +37,13 @@ export abstract class Renderer2D extends Renderer {
 }
 
 export class CircleRenderer extends Renderer2D {
-    // @ts-ignore
-    radius: number;
-    // @ts-ignore
-    colour: colour;
+    radius = 1;
+    colour = rgb();
 
     constructor ({
          radius = 1,
          offset = new v2(0, 0),
-         colour = rgb(0, 0, 0)
+         colour = rgb()
      }) {
         super("CircleRenderer", offset);
 
@@ -63,23 +68,18 @@ export class CircleRenderer extends Renderer2D {
         });
     }
 
-    draw (arg: {position: v2, transform: Transform, ctx: CanvasRenderingContext2D, zoom: number, center: v2}): void {
-        const radius = this.radius * arg.zoom * arg.transform.scale.x;
+    draw ({zoom, transform, ctx, position, center}: drawArgs): void {
+        const radius = this.radius * zoom * transform.scale.x;
         if (radius <= 0) return;
 
-        circle(arg.ctx, getZoomScaledPosition(arg.position.clone.add(this.offset), arg.zoom, arg.center), radius, this.colour.rgb);
+        circle(ctx, getZoomScaledPosition(position.clone.add(this.offset), zoom, center), radius, this.colour.rgb);
     }
 }
 
 export class RectRenderer extends Renderer2D {
-    Start(): void {}
-
-    // @ts-ignore
-    height: number;
-    // @ts-ignore
-    width: number;
-    // @ts-ignore
-    colour: colour;
+    height = 1;
+    width = 1;
+    colour = rgb();
 
     constructor ({
          height = 1,
@@ -118,7 +118,9 @@ export class RectRenderer extends Renderer2D {
         });
     }
 
-    draw (arg: {position: v2, transform: Transform, ctx: CanvasRenderingContext2D, zoom: number, center: v2}): void {
+    Start() {}
+
+    draw (arg: drawArgs): void {
         const width = this.width * arg.transform.scale.x * arg.zoom;
         const height = this.height * arg.transform.scale.y * arg.zoom;
 
@@ -141,14 +143,10 @@ export class RectRenderer extends Renderer2D {
 }
 
 export class ImageRenderer2D extends Renderer2D {
-    Start(): void {}
 
-    // @ts-ignore
-    height: number;
-    // @ts-ignore
-    width: number;
-    // @ts-ignore
-    url: string;
+    height = 1;
+    width = 1;
+    url = '';
 
     constructor ({
          height = 1,
@@ -176,7 +174,12 @@ export class ImageRenderer2D extends Renderer2D {
         });
     }
 
-    draw (arg: {position: v2, transform: Transform, ctx: CanvasRenderingContext2D, zoom: number, center: v2}): void {
+    Start(): void {}
+
+    draw (arg: drawArgs): void {
+        if (!this.url) {
+            return;
+        }
         const width = this.width * arg.transform.scale.x * arg.zoom;
         const height = this.height * arg.transform.scale.y * arg.zoom;
 
