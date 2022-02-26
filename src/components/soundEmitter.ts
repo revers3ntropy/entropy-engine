@@ -1,5 +1,4 @@
 import {Component} from "../ECS/component";
-import {Transform} from "./transform";
 
 export class soundEmitter extends Component {
     src = '';

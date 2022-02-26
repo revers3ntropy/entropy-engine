@@ -5,11 +5,11 @@ import {getEntityFromJSON, setParentFromInfo} from "../JSONprocessor";
 import { Transform } from '../components/transform';
 
 export type entityConfig = {
-    name: string
-    components: Component[]
-    tag: string | undefined
-    transform: Transform
-    Static: boolean
+    name?: string
+    components?: Component[]
+    tag?: string | undefined
+    transform?: Transform
+    Static?: boolean
 };
 
 export class Entity {

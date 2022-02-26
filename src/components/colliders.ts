@@ -5,12 +5,9 @@ import {v2} from "../maths/v2"
 import {Transform} from "../index";
 
 export abstract class Collider extends Component {
-    // @ts-ignore
-    offset: v2;
-    // @ts-ignore
-    solid: boolean;
-    // @ts-ignore
-    MatterBody: Matter.Body
+    offset = v2.zero;
+    solid = true;
+    MatterBody: Matter.Body;
 
     protected constructor (subtype: string, solid: boolean, offset: v2, matterBody: Matter.Body) {
         super("Collider", subtype);
@@ -38,8 +35,7 @@ export abstract class Collider extends Component {
 }
 
 export class CircleCollider extends Collider {
-    // @ts-ignore
-    radius: number;
+    radius = 0;
 
     constructor ({
          radius = 1,
@@ -85,10 +81,8 @@ export class CircleCollider extends Collider {
 }
 
 export class RectCollider extends Collider {
-    // @ts-ignore
-    width: number;
-    // @ts-ignore
-    height: number;
+    width = 0;
+    height = 0;
 
     constructor ({ width = 1, height = 1, solid = true, offset = new v2(0, 0) }) {
         super("RectCollider", solid, offset,

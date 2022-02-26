@@ -4,16 +4,11 @@ import {JSONifyComponent} from "../util/general";
 
 export class Body extends Component {
 
-    // @ts-ignore
-    velocity: v3;
-    // @ts-ignore
-    mass: number;
-    // @ts-ignore
-    friction: number;
-    // @ts-ignore
-    airResistance: number;
-    // @ts-ignore
-    bounciness: number;
+    velocity = v3.zero;
+    mass = 0;
+    friction = 0;
+    airResistance = 0;
+    bounciness = 0;
 
     constructor({
         velocity = v3.zero,
@@ -24,7 +19,7 @@ export class Body extends Component {
     }) {
         super("Body");
 
-        this.addPublic<v3>({
+        this.addPublic({
             name: 'velocity',
             value: velocity,
             description: 'The speed and direction of the object at the first frame',
@@ -60,7 +55,7 @@ export class Body extends Component {
         return JSONifyComponent(this, 'Body');
     }
 
-    applyForce(force: v3): v3 {
+    applyForce (force: v3) {
         this.velocity.add(force.clone.scale(1/this.mass));
         return this.velocity;
     }

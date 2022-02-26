@@ -140,7 +140,6 @@ export class Scene {
     }
 
 
-
     //      STATIC
 
     static scenes: Scene[] = [];
