@@ -2,7 +2,7 @@ import {Component} from '../ECS/component';
 import type {Entity} from '../ECS/entity';
 import { v2, v3 } from '../maths/maths';
 
-import {global, Primitive, ESNamespace, ESFunction, ESJSBinding, ESString} from 'entropy-script/src';
+import {global, Primitive, ESNamespace, ESFunction, ESJSBinding, ESString} from 'entropy-script';
 
 export class Script extends Component {
     script: ESNamespace | undefined;

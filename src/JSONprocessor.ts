@@ -3,11 +3,7 @@ import {v2, v3} from "./maths/maths";
 import {Component} from "./ECS/component";
 import {Script} from "./components/scriptComponent";
 
-import {Context} from 'entropy-script/src/runtime/context';
-import {global} from 'entropy-script/src/constants';
-import {ESNamespace, ESString} from 'entropy-script/src/runtime/primitiveTypes';
-import {run} from 'entropy-script/src';
-import {ESError} from 'entropy-script/src/errors';
+import {Context, run, ESNamespace, global, ESString} from 'entropy-script';
 
 // all components
 import {CircleCollider, RectCollider} from './components/colliders';

@@ -16,7 +16,7 @@ import { GUIImage } from "../components/gui/image";
 import { Camera } from "../components/camera";
 import { Transform } from "../components/transform";
 
-import * as es from 'entropy-script/src';
+import * as es from 'entropy-script';
 
 
 export async function init () {
