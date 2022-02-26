@@ -10,12 +10,17 @@ export class Transform extends Component {
 
     parent: Transform | number = 0;
 
-    constructor({
+    constructor ({
         position = v3.zero,
         scale = new v3(1, 1, 1),
         rotation = v3.zero,
 
         parent = Scene.active
+    }: {
+        position?: v3,
+        scale?: v3,
+        rotation?: v3,
+        parent?: Transform | number
     }) {
         super('Transform');
 
@@ -104,7 +109,7 @@ export class Transform extends Component {
             Protects against types and circular parenting
          */
         if (!(val instanceof Transform) && typeof val !== 'number') {
-            this.parent = Scene.active;
+            this.parent ??= Scene.active;
             return;
         }
 

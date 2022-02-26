@@ -19,7 +19,7 @@ import { Transform} from "./components/transform";
 import {defaultSceneSettings, Scene, sceneSettings} from './ECS/scene';
 import {rgba} from "./util/colour";
 
-// reference everything so the ts compiler will think that it is being used and wont delete the import
+type json = any;
 
 const components: {[k: string]: new (...args: any[]) => Component} = {
     CircleCollider, RectCollider,
@@ -32,8 +32,8 @@ const components: {[k: string]: new (...args: any[]) => Component} = {
 const cacheBust = Math.floor(Math.random() * 200001);
 
 function isV2(o: any) {
+    if (typeof o !== 'object') return false;
 
-    if (!o) return false;
     if (!Array.isArray(o)) return false;
 
     return (o.length === 2 &&
@@ -43,8 +43,7 @@ function isV2(o: any) {
 }
 
 function isV3(o: any) {
-
-    if (!o) return false;
+    if (typeof o !== 'object') return false;
     if (!Array.isArray(o)) return false;
 
     return (o.length === 3 &&
@@ -54,13 +53,13 @@ function isV3(o: any) {
 }
 
 function isColour (o: any) {
-    if (!o) return false;
+    if (typeof o !== 'object') return false;
     if (typeof o.r !== 'number') return false;
     if (typeof o.g !== 'number') return false;
     return typeof o.b === 'number';
 }
 
-function componentPropProcessor (propName: any, componentJSON: any, component: Component | any) {
+function componentPropProcessor (propName: string, componentJSON: json, component: Component | json) {
     // stop it overriding 'type'
     if (propName === 'type' || propName === 'subType') return;
 
@@ -88,7 +87,7 @@ function componentPropProcessor (propName: any, componentJSON: any, component: C
     component[propName] = componentJSON[propName];
 }
 
-function dealWithTransform (transformJSON: any) {
+function dealWithTransform (transformJSON: json) {
     let parentInfo = transformJSON['parent'];
 
     const transform = new Transform({});
@@ -106,7 +105,7 @@ function dealWithTransform (transformJSON: any) {
     return {parentInfo, transform};
 }
 
-async function dealWithScriptComponent (componentJSON: any): Promise<Script | void> {
+async function dealWithScriptComponent (componentJSON: json): Promise<Script | void> {
     // two parts to a script: path and name
     const path = componentJSON['path'];
 
@@ -172,7 +171,7 @@ async function dealWithScriptComponent (componentJSON: any): Promise<Script | vo
     }
 }
 
-async function componentProcessor(componentJSON: any): Promise<Component|void> {
+async function componentProcessor(componentJSON: json): Promise<Component|void> {
     let component;
     if (componentJSON['type'] === 'Script') {
         // deal with scripts separately
@@ -196,9 +195,9 @@ async function componentProcessor(componentJSON: any): Promise<Component|void> {
     return component;
 }
 
-export async function getEntityFromJSON (JSON: any) {
+export async function getEntityFromJSON (JSON: json) {
     /*
-        Needs MUCH more error checking as you can pass anything as the JSON into it
+        Needs MUCH more error checking as you can pass jsonthing as the JSON into it
      */
     const name: string = JSON['name'] ?? `entity ${Entity.entities.length}`;
     const tag: string = JSON['tag'] ?? 'entity';
@@ -249,7 +248,7 @@ export function setParentFromInfo (parentInfo: {type: string, name: string}, chi
 }
 
 
-export async function entitiesFromJSON (JSON: any) {
+export async function entitiesFromJSON (JSON: json) {
 
     let parentPairs: {[key: string]: {type: string, name: string}} = {};
     if (!Array.isArray(JSON)) {
@@ -272,7 +271,7 @@ export async function entitiesFromJSON (JSON: any) {
     }
 }
 
-export function initialiseScenes (JSON: any) {
+export function initialiseScenes (JSON: json) {
     for (let scene of JSON) {
         const settings: sceneSettings = defaultSceneSettings();
         const settingsJSON = scene['settings'] ?? {};

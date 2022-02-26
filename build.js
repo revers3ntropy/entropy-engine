@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 
-const packageConf = JSON.parse(String(fs.readFileSync('./package.json')));
+const packageConf = JSON.parse(fs.readFileSync('./package.json').toString());
 const version = packageConf['version'];
 
 function run (cmd) {
@@ -26,9 +26,14 @@ const WP_LOG_FILE = 'webpack-log.txt';
 		await run(`cp build/${version}.js.map build/stable.js.map`);
 	}
 
-	console.log(String(fs.readFileSync(WP_LOG_FILE)));
+	console.log(fs.readFileSync(WP_LOG_FILE).toString());
 
 	await run (`rm ${WP_LOG_FILE}`);
+
+	const licenseFile = `build/${version}.js.LICENSE.txt`;
+	if (fs.existsSync(licenseFile)) {
+		await run (`rm ./${licenseFile}`);
+	}
 
 	console.log(`Compiled and bundled in ${Date.now() - start}ms`);
 })();

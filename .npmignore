@@ -3,3 +3,4 @@ webpack.log
 .gitattributes
 webpack.config.js
 /test/
+/.idea/

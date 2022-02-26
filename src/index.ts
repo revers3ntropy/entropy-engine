@@ -1,24 +1,24 @@
-import { Entity } from "./ECS/entity"
-import { startAnimation } from "./systems/rendering/startAnimation"
-import { Script } from './components/scriptComponent'
-import {Collider} from './components/colliders'
-import license from "./license"
-import {getMousePos, input, setMousePos} from "./input"
-import { GUIElement, GUITextBox } from "./components/gui/gui"
-import { entitiesFromJSON, initialiseScenes } from './JSONprocessor'
-import {Camera} from "./components/camera"
-import {getCanvasStuff, setCanvasSize} from "./util/general"
-import {rgb} from './util/colour'
-import {Scene} from './ECS/scene'
+import { Entity } from "./ECS/entity";
+import { startAnimation } from "./systems/rendering/startAnimation";
+import { Script } from './components/scriptComponent';
+import {Collider} from './components/colliders';
+import license from "./license";
+import {getMousePos, input, setMousePos} from "./input";
+import { GUIElement, GUITextBox } from "./components/gui/gui";
+import { entitiesFromJSON, initialiseScenes } from './JSONprocessor';
+import {Camera} from "./components/camera";
+import {getCanvasStuff, setCanvasSize} from "./util/general";
+import {rgb} from './util/colour';
+import {Scene} from './ECS/scene';
 import {Systems} from "./ECS/system";
 import {Transform} from "./components/transform";
 import {RectCollider, CircleCollider} from "./components/colliders";
-import { v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3 } from './maths/maths'
-import { Body } from "./components/body"
-import { CircleRenderer, RectRenderer, ImageRenderer2D } from './components/renderers2D'
-import { GUIBox, GUIText, GUIRect, GUICircle, GUIPolygon, GUIImage } from './components/gui/gui'
+import { v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3 } from './maths/maths';
+import { Body } from "./components/body";
+import { CircleRenderer, RectRenderer, ImageRenderer2D } from './components/renderers2D';
+import { GUIBox, GUIText, GUIRect, GUICircle, GUIPolygon, GUIImage } from './components/gui/gui';
 
-import {init as initEES} from './scripting/scripts'
+import {init as initEES} from './scripting/scripts';
 
 import './systems/physics/physics';
 import './systems/rendering/renderer';
@@ -28,11 +28,12 @@ export {
     rgb,
     Entity,
     Script,
-    CircleCollider, RectCollider,
+    CircleCollider, RectCollider, Collider,
     v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3,
     Body,
     CircleRenderer, RectRenderer, ImageRenderer2D,
-    GUIBox, GUIText, GUITextBox, GUIRect, GUICircle, GUIPolygon, GUIImage,
+    GUIBox, GUIText, GUITextBox, GUIRect, GUICircle, GUIPolygon, GUIImage, GUIElement,
+    getMousePos,
     input,
     Camera,
     entitiesFromJSON,
@@ -40,6 +41,13 @@ export {
     Scene,
     Systems
 };
+
+export * from './ECS/entity';
+export * from './ECS/component';
+export * from './ECS/scene';
+export * from './ECS/system';
+export * from './util/colour';
+export * from './util/general';
 
 /**
  * Initialises Entropy Engine
