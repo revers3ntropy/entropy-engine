@@ -24,6 +24,8 @@ import './systems/physics/physics';
 import './systems/rendering/renderer';
 import './systems/entities/entityController';
 
+export {init as initialiseEntropyScript } from './scripting/scripts';
+
 export {
     rgb,
     Entity,
@@ -56,10 +58,9 @@ export * from './util/general';
  * @param {boolean} [shouldInitEES=true] Only set to false if Entropy Engine Script has already been initialised
  * @returns { { run: () => Promise<void> } } Contains run function which starts the game loop
  */
-export default function entropyEngine ({
+export function EntropyEngine ({
     canvasID= "canvas",
-    performanceDebug = 0,
-    shouldInitEES = true
+    performanceDebug = 0
 }) {
 
     // for the event listeners
@@ -164,12 +165,11 @@ export default function entropyEngine ({
 
     async function init () {
 
-        if (licenseLevel < 2)
+        if (licenseLevel < 2) {
             await startAnimation(canvasID);
-
-        if (shouldInitEES) {
-            await initEES();
         }
+
+        await initEES();
 
         Scene.activeScene.findMainCamera();
 
@@ -227,7 +227,7 @@ export async function runFromJSON (path: string, config: any = {}) {
 
     initialiseScenes(data['scenes']);
 
-    const returns = entropyEngine(config);
+    const returns = EntropyEngine(config);
     
     await entitiesFromJSON(data['entities']);
 

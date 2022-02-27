@@ -31,9 +31,8 @@ export function getMousePosWorldSpace (canvas: HTMLCanvasElement, event: MouseEv
         .screenSpaceToWorldSpace(mousePos, canvas, Camera.main.transform.position);
 }
 
-export const input: any = {
-    listen: (type: string, handler: (key: KeyboardEvent) => void) => {
-        // @ts-ignore
+export const input: {[k: string]: any} = {
+    listen: (type: string, handler: EventListenerOrEventListenerObject) => {
         document.addEventListener(type, handler);
     },
     'mouseDown': false,

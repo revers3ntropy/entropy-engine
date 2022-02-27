@@ -18,8 +18,11 @@ import { Transform } from "../components/transform";
 
 import * as es from 'entropy-script';
 
+let initialised = false;
 
 export async function init () {
+    if (initialised) return;
+    initialised = true;
 
     await es.init(console.log, () => {}, false, {
         print: console.log,
@@ -45,5 +48,5 @@ export async function init () {
             Camera,
             Transform,
         }
-    });
+    }, es.global);
 }

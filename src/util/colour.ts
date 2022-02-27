@@ -6,7 +6,7 @@ export class colour {
 
     isColour: boolean;
 
-    constructor (red: number, green: number, blue: number, alpha = 1) {
+    constructor (red=0, green=red, blue=red, alpha = 1) {
         this.red = red;
         this.green = green;
         this.blue = blue;

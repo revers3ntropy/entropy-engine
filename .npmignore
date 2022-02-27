@@ -4,3 +4,4 @@ webpack.log
 webpack.config.js
 /test/
 /.idea/
+/src/

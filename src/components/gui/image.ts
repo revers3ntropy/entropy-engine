@@ -32,9 +32,6 @@ export class GUIImage extends GUIElement {
         });
     }
 
-    Start () {}
-    Update () {}
-
     draw (ctx: CanvasRenderingContext2D, transform: Transform): void {
         if (!this.url) {
             return;
