@@ -49,7 +49,7 @@ export function circle (ctx: CanvasRenderingContext2D, position: v2, radius: num
     ctx.closePath();
 }
 
-export function rect (ctx: CanvasRenderingContext2D, position: v2, width: number, height: number, colour: string, rotDeg: number) {
+export function rect (ctx: CanvasRenderingContext2D, position: v2, width: number, height: number, colour: string, rotDeg = 0) {
     rotateAroundPointWrapper(ctx, position.clone.add(new v2(width/2, height/2)), rotDeg, () => {
         ctx.beginPath();
 
@@ -62,7 +62,7 @@ export function rect (ctx: CanvasRenderingContext2D, position: v2, width: number
     });
 }
 
-export function polygon (ctx: CanvasRenderingContext2D, points: v2[], fillColour: string, fill = true, rotDeg: number) {
+export function polygon (ctx: CanvasRenderingContext2D, points: v2[], fillColour: string, fill = true, rotDeg=0) {
     rotateAroundPointWrapper(ctx, v2.avPoint(points), rotDeg, () => {
         ctx.beginPath();
 
@@ -83,7 +83,16 @@ export function polygon (ctx: CanvasRenderingContext2D, points: v2[], fillColour
     });
 }
 
-export function text (ctx: CanvasRenderingContext2D, text: string, fontSize: number, font: string, colour: string, position: v2, alignment='center', rotDeg = 0) {
+export function text (
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    fontSize: number,
+    font: string,
+    colour: string,
+    position: v2,
+    alignment='center',
+    rotDeg = 0
+) {
     const size = new v2(ctx.measureText(text).width, fontSize);
     const center = position.clone.add(size.clone.scale(0.5));
     rotateAroundPointWrapper(ctx, center, rotDeg, () => {
@@ -111,7 +120,7 @@ export function text (ctx: CanvasRenderingContext2D, text: string, fontSize: num
     });
 }
 
-export function image (ctx: CanvasRenderingContext2D, position: v2, size: v2, src: string, rotDeg: number) {
+export function image (ctx: CanvasRenderingContext2D, position: v2, size: v2, src: string, rotDeg=0) {
     rotateAroundPointWrapper(ctx, position.clone.add(size.clone.scale(0.5)), rotDeg, () => {
         position = position.clone;
         ctx.beginPath();

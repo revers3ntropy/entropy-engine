@@ -38,7 +38,7 @@ export {
     getMousePos,
     input,
     Camera,
-    entitiesFromJSON,
+    entitiesFromJSON, initialiseScenes,
     Transform,
     Scene,
     Systems
@@ -50,6 +50,11 @@ export * from './ECS/scene';
 export * from './ECS/system';
 export * from './util/colour';
 export * from './util/general';
+
+export * from './systems/rendering/basicShapes';
+export * from './systems/rendering/debugRenderer';
+export * from './systems/rendering/renderer';
+export * from './systems/rendering/startAnimation';
 
 /**
  * Initialises Entropy Engine
