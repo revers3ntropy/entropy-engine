@@ -567,7 +567,9 @@ declare module 'entropy-engine' {
         static scenes: Scene[];
         static active_: number;
 
+        // @ts-ignore
         static set active (val: number | Scene);
+        // @ts-ignore
         static get active (): number;
 
         static get activeScene (): Scene;

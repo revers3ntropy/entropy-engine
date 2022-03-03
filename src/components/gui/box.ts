@@ -1,4 +1,4 @@
-import { colour, rgb } from "../../util/colour";
+import { rgb } from "../../util/colour";
 import {Transform} from "../transform";
 import {roundedRect} from "../../systems/rendering/basicShapes";
 import {GUIElement} from "./gui";

@@ -3,7 +3,6 @@ import {Camera} from "../components/camera";
 import {v3} from "../maths/v3";
 import {colour, rgb} from "../util/colour";
 import {Script} from "../components/scriptComponent";
-import {getCanvasStuff} from "../util/general";
 
 export interface sceneSettings {
     // license + general
@@ -12,8 +11,6 @@ export interface sceneSettings {
     gameName: string;
 
     // rendering
-    canvasID: string;
-    ctx?: CanvasRenderingContext2D;
     maxFrameRate: number;
     timeScale: number;
     backgroundTint: colour,
@@ -32,7 +29,6 @@ export const defaultSceneSettings = (): sceneSettings => ({
     version: '0.0.0',
     gameName: 'Entropy Engine Game',
 
-    canvasID: 'myCanvas',
     maxFrameRate: 60,
     timeScale: 1,
 
@@ -53,11 +49,6 @@ export class Scene {
         this.id = Scene.scenes.length;
         this.name = name;
         this.settings = settings;
-
-        if (!settings.ctx) {
-            const {ctx} = getCanvasStuff(settings.canvasID);
-            settings.ctx = ctx;
-        }
     }
     
     json () {
@@ -68,7 +59,6 @@ export class Scene {
                 version: this.settings.version,
                 gameName: this.settings.gameName,
 
-                canvasID: this.settings.canvasID,
                 maxFrameRate: this.settings.maxFrameRate,
                 timeScale: this.settings.timeScale,
                 backgroundTint: this.settings.backgroundTint?.json || rgb.parse('white').json,
@@ -148,10 +138,11 @@ export class Scene {
 
     // @ts-ignore
     static set active (val: number | Scene) {
-        if (val instanceof Scene)
+        if (val instanceof Scene) {
             Scene.active_ = val.id;
-        else
+        } else {
             Scene.active_ = val;
+        }
     }
 
     // @ts-ignore
@@ -160,8 +151,9 @@ export class Scene {
     }
 
     static get activeScene (): Scene {
-        if (this.scenes.length < 1)
-            throw new Error('No scenes found');
+        if (this.scenes.length < 1) {
+            throw 'No scenes found';
+        }
         
         return Scene.sceneByID(Scene.active);
     }
@@ -176,8 +168,7 @@ export class Scene {
         );
         
         if (scene === undefined || !scene[0] || !(scene[0] instanceof Scene)){
-            console.error(`Cannot find scene name: ${name}`);
-            throw Error();
+            throw `Cannot find scene name: ${name}`;
         }
         
         return scene[0];

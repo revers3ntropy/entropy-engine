@@ -1,7 +1,11 @@
+import {Collider} from './components/colliders.js';
+import {Scene} from './ECS/scene.js';
 import {v2} from "./maths/v2";
 import {Entity} from "./ECS/entity";
 import {GUIElement, GUITextBox} from "./components/gui/gui";
 import {Camera} from "./components/camera";
+import {setCanvasSize} from './util/general.js';
+import {canvases, getCTX} from './util/rendering.js';
 
 export function getMousePos(canvas: HTMLCanvasElement, event: MouseEvent) {
     let rect = canvas.getBoundingClientRect();
@@ -96,4 +100,97 @@ document.addEventListener('keydown', event => {
 export function setMousePos(event: any, canvas: HTMLCanvasElement) {
     input.cursorPosition = getMousePos(canvas, event);
     input.cursorPosWorldSpace = getMousePosWorldSpace(canvas, event);
+}
+
+/**
+ * Adds the event listeners to the input canvas
+ */
+export function addEventListeners (canvases: canvases, isInitialised: () => boolean) {
+    const canvas = canvases.input;
+    canvas?.parentNode?.addEventListener('resize', () => {
+        // TO-DO: this doesn't work
+        setCanvasSize(canvases);
+    });
+
+
+    // managers and constants
+    canvas.addEventListener('mousemove', (evt: any) => {
+        if (!isInitialised()) return;
+
+        setMousePos(evt, canvas);
+
+        Entity.loop(sprite => {
+            if (!(sprite.sceneID === Scene.active)) return;
+
+            for (const component of sprite.components) {
+                if (component.type !== 'GUIElement') return;
+
+                const component_ = (<unknown>component) as GUIElement;
+                component_.hovered = component_.touchingPoint(input.cursorPosition, getCTX(canvas), sprite.transform);
+            }
+        });
+    }, false);
+
+    canvas.addEventListener('mousedown', (evt: any) => {
+        if (!isInitialised()) return;
+        input.mouseDown = true;
+
+        setMousePos(evt, canvas);
+
+        Scene.activeScene.loopThroughScripts((script, sprite) => {
+            if (!(sprite.sceneID === Scene.active)) return;
+            if (!sprite.hasComponent('Collider')) return;
+
+            let collider = sprite.getComponent<Collider>('Collider');
+            const mousePos = getMousePos(canvas, evt);
+
+            if (!collider.overlapsPoint(sprite.transform, mousePos)) {
+                return;
+            }
+
+            //script.runMethod('onMouseDown', []);
+        });
+    }, false);
+
+    canvas.addEventListener('keydown', (event) => {
+        setMousePos(event, canvas);
+    });
+    canvas.addEventListener('keyup', (event) => {
+        setMousePos(event, canvas);
+    });
+
+    canvas.addEventListener('mouseup', (evt) => {
+        if (!isInitialised()) return;
+
+        input.mouseDown = false;
+        setMousePos(evt, canvas);
+
+        Scene.activeScene.loopThroughScripts((script, entity) => {
+            if (!(entity.sceneID === Scene.active)) return;
+            if (entity.hasComponent('Collider')){
+
+                let collider = entity.getComponent<Collider>('Collider');
+                const mousePos = getMousePos(canvas, evt);
+
+                if (!collider.overlapsPoint(entity.transform, mousePos)) {
+                    return;
+                }
+
+                script.runMethod('onMouseUp', entity, []);
+
+            } else if (entity.hasComponent('GUIElement')) {
+                const ui = entity.getComponent<GUIElement>('GUIElement');
+                if (ui.hovered) {
+                    script.runMethod('onClick', entity, []);
+                }
+
+                if (ui.subtype !== 'GUITextBox') return;
+
+                // sets it to be selected if it is being hovered over,
+                // and not selected if it is not hovered over
+                let ui_ = ui as GUITextBox;
+                ui_.selected = ui_.hovered;
+            }
+        });
+    }, false);
 }

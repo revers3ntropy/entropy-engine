@@ -1,6 +1,6 @@
 import {Camera} from '../../components/camera';
 import {Entity} from '../../ECS/entity';
-import {getCanvasSize} from '../../util/general';
+import {getCanvasSize} from '../../util/rendering';
 import {circle, rect, image, rotateAroundPointWrapper} from './basicShapes';
 import {v2} from '../../maths/v2';
 import {CircleCollider, RectCollider, Collider } from '../../components/colliders';

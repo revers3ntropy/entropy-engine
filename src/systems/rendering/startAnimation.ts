@@ -1,14 +1,14 @@
-import {getCanvasSize, getCanvasStuff, sleep} from "../../util/general";
+import {sleep} from "../../util/general";
+import {getCanvasSize, getCTX} from '../../util/rendering';
 import {rect, text} from "./basicShapes";
 import {v2} from "../../maths/v2";
 
 /**
  * Draws the start animation. Resolves promise once animation has finished
- * @param {string} canvasID
- * @returns {Promise<void>}
  */
-export async function startAnimation(canvasID: string) {
-    const {canvas, ctx} = getCanvasStuff(canvasID);
+export async function startAnimation(canvas: HTMLCanvasElement) {
+
+    const ctx = getCTX(canvas);
 
     const fontSize = canvas.width * 0.1;
 

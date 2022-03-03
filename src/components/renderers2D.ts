@@ -1,6 +1,7 @@
 import {v2} from "../maths/v2";
 import {circle, image, rect} from "../systems/rendering/basicShapes";
-import {getZoomScaledPosition, JSONifyComponent} from '../util/general'
+import {JSONifyComponent} from '../util/general'
+import {getZoomScaledPosition} from '../util/rendering';
 import {colour, rgb, rgba} from "../util/colour";
 import { Transform } from "./transform";
 import { Renderer } from "./renderer";

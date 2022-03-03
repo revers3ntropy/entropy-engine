@@ -3,11 +3,11 @@ import {Scene} from "../../ECS/scene";
 
 Systems.systems.push({
     name: 'Scripts',
-    Start: (scene: Scene) => {
+    Start: (scene, canvases) => {
         scene.broadcast('Start', []);
     },
 
-    Update: (scene: Scene) => {
+    Update: (scene, canvases) => {
         scene.broadcast('Update', []);
     },
 

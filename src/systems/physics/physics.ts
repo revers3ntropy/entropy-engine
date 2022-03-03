@@ -1,5 +1,3 @@
-import * as Matter from 'matter-js';
-
 import {Systems} from "../../ECS/system";
 import {Scene} from "../../ECS/scene";
 import type {Body} from "../../components/body";
@@ -7,6 +5,10 @@ import {CircleCollider, Collider, RectCollider} from "../../components/colliders
 import {Entity} from "../../ECS/entity";
 import {v3} from "../../maths/v3";
 import {Script} from "../../components/scriptComponent";
+import {canvases} from '../../util/rendering';
+
+import * as Matter from 'matter-js';
+import {ESJSBinding} from 'entropy-script';
 
 Systems.systems.push({
     name: 'Physics',
@@ -14,7 +16,7 @@ Systems.systems.push({
     engine: Matter.Engine.create(),
     runner: Matter.Runner.create(),
 
-    Start: function (scene: Scene) {
+    Start: function (scene, canvases) {
 
         for (let entity of scene.entities) {
             if (!entity.hasComponent('Body')) continue;
@@ -90,15 +92,10 @@ Systems.systems.push({
     },
 
     callCollides: function (entity: Entity, collidesWith: Entity) {
-        for (let component of entity.components) {
-            if (component.type === 'Script') {
-                /*
-                (component as Script)
-                    .runMethod('onCollision',
-                        [new N_any(collidesWith)]
-                    );
-                 */
-            }
+        for (const script of entity.getComponents<Script>('script')) {
+            script.runMethod('onCollision', entity,
+                [new ESJSBinding(collidesWith)]
+            );
         }
     },
 
@@ -130,7 +127,7 @@ Systems.systems.push({
         }
     },
 
-    Update: function (scene: Scene) {
+    Update: function (scene, canvases) {
 
         const bodies: [Matter.Body, Entity][] = [];
 

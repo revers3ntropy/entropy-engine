@@ -17,36 +17,41 @@ export function rotateAroundPointWrapper (ctx: CanvasRenderingContext2D, p: v2, 
 }
 
 // draw functions
-export function roundedRect (ctx: CanvasRenderingContext2D, width: number, height: number, pos: v2, colour: string, radius: number) {
-    // src: https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-using-html-canvas
-    ctx.beginPath();
+export function roundedRect (ctx: CanvasRenderingContext2D, width: number, height: number, pos: v2, colour: string, radius: number, rotDeg=0) {
+    rotateAroundPointWrapper(ctx, pos.clone.add(new v2(width/2, height/2)), rotDeg, () => {
 
-    ctx.moveTo(pos.x + radius, pos.y);
-    ctx.lineTo(pos.x + width - radius, pos.y);
-    ctx.quadraticCurveTo(pos.x + width, pos.y, pos.x + width, pos.y + radius);
-    ctx.lineTo(pos.x + width, pos.y + height - radius);
-    ctx.quadraticCurveTo(pos.x + width, pos.y + height, pos.x + width - radius, pos.y + height);
-    ctx.lineTo(pos.x + radius, pos.y + height);
-    ctx.quadraticCurveTo(pos.x, pos.y + height, pos.x, pos.y + height - radius);
-    ctx.lineTo(pos.x, pos.y + radius);
-    ctx.quadraticCurveTo(pos.x, pos.y, pos.x + radius, pos.y);
-    ctx.closePath();
+        // src: https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-using-html-canvas
+        ctx.beginPath();
 
-    ctx.fillStyle = colour;
+        ctx.moveTo(pos.x + radius, pos.y);
+        ctx.lineTo(pos.x + width - radius, pos.y);
+        ctx.quadraticCurveTo(pos.x + width, pos.y, pos.x + width, pos.y + radius);
+        ctx.lineTo(pos.x + width, pos.y + height - radius);
+        ctx.quadraticCurveTo(pos.x + width, pos.y + height, pos.x + width - radius, pos.y + height);
+        ctx.lineTo(pos.x + radius, pos.y + height);
+        ctx.quadraticCurveTo(pos.x, pos.y + height, pos.x, pos.y + height - radius);
+        ctx.lineTo(pos.x, pos.y + radius);
+        ctx.quadraticCurveTo(pos.x, pos.y, pos.x + radius, pos.y);
+        ctx.closePath();
 
-    ctx.fill();
-    ctx.closePath();
+        ctx.fillStyle = colour;
+
+        ctx.fill();
+        ctx.closePath();
+    });
 }
 
-export function circle (ctx: CanvasRenderingContext2D, position: v2, radius: number, colour: string) {
-    ctx.beginPath();
+export function circle (ctx: CanvasRenderingContext2D, pos: v2, radius: number, colour: string, angleRad=Math.PI * 2, rotDeg=0) {
+    rotateAroundPointWrapper(ctx, pos.clone, rotDeg, () => {
+        ctx.beginPath();
 
-    ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, radius, 0, angleRad);
 
-    ctx.fillStyle = colour;
+        ctx.fillStyle = colour;
 
-    ctx.fill();
-    ctx.closePath();
+        ctx.fill();
+        ctx.closePath();
+    });
 }
 
 export function rect (ctx: CanvasRenderingContext2D, position: v2, width: number, height: number, colour: string, rotDeg = 0) {

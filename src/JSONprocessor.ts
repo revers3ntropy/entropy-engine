@@ -55,9 +55,13 @@ function isColour (o: any) {
     return typeof o.b === 'number';
 }
 
-function componentPropProcessor (propName: string, componentJSON: json, component: Component | json) {
-    // stop it overriding 'type'
-    if (propName === 'type' || propName === 'subType') return;
+/**
+ *
+ * @param propName
+ * @param componentJSON
+ * @param component
+ */
+function componentPropProcessor (propName: string, componentJSON: json, component: any) {
 
     if (isColour(componentJSON[propName])) {
         const c = componentJSON[propName];
@@ -185,6 +189,11 @@ async function componentProcessor(componentJSON: json): Promise<Component|void> 
             continue;
         }
 
+        // stop it overriding 'type'
+        if (prop === 'type' || prop === 'subType') {
+            continue;
+        }
+
         componentPropProcessor(prop, componentJSON, component);
     }
 
@@ -193,7 +202,7 @@ async function componentProcessor(componentJSON: json): Promise<Component|void> 
 
 export async function getEntityFromJSON (JSON: json) {
     /*
-        Needs MUCH more error checking as you can pass jsonthing as the JSON into it
+        Needs MUCH more error checking as you can pass anything as the JSON into it
      */
     const name: string = JSON['name'] ?? `entity ${Entity.entities.length}`;
     const tag: string = JSON['tag'] ?? 'entity';
@@ -261,7 +270,9 @@ export async function entitiesFromJSON (JSON: json) {
     // deal with parent-child stuff once all entities have been initialised
     for (let childName in parentPairs) {
         // no parent has been specified
-        if (!parentPairs[childName]) continue;
+        if (!parentPairs[childName]) {
+            continue;
+        }
 
         setParentFromInfo(parentPairs[childName], Entity.find(childName)?.transform);
     }
@@ -271,9 +282,12 @@ export function initialiseScenes (JSON: json) {
     for (let scene of JSON) {
         const settings: sceneSettings = defaultSceneSettings();
         const settingsJSON = scene['settings'] ?? {};
-        for (let prop in settingsJSON) {
+
+        for (let prop of Object.keys(settingsJSON)) {
+            // not proper use of componentPropProcessor, but it works
             componentPropProcessor(prop, scene['settings'] || {}, settings);
         }
+
         Scene.create({
             name: scene.name,
             settings

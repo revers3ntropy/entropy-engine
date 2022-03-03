@@ -1,4 +1,5 @@
 import {v2, v3} from "../maths/maths";
+import {canvases} from './rendering';
 
 /**
  * Resolves promise after an amount of time
@@ -9,35 +10,18 @@ export function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function getCanvasSize (canvas: HTMLCanvasElement): v2 {
-    return new v2(canvas.width, canvas.height);
-}
+export function setCanvasSize (canvas: canvases) {
 
-export function getZoomScaledPosition (pos: v2, zoom: number, center: v2): v2 {
-    // scales the position from the center
-    return pos.sub(center).scale(zoom).add(center);
-}
-
-export function getCanvasStuff (id: string): {
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D
-} {
-    const canvas = document.getElementById(id);
-    if (!(canvas instanceof HTMLCanvasElement)) {
-        throw 'Canvas element is not instance of HTMLCanvasElement';
+    function set (c: HTMLCanvasElement) {
+        c.style.width = '100%';
+        c.style.height = '100%';
+        c.width  = c.offsetWidth;
+        c.height = c.offsetHeight;
     }
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-        throw `Canvas doesn't have 2d context`;
-    }
-    return { canvas, ctx };
-}
 
-export function setCanvasSize (canvas: HTMLCanvasElement) {
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    set(canvas.input);
+    set(canvas.GUI);
+    set(canvas.render);
 }
 
 export function JSONifyComponent (component: any, type? : string) {
@@ -107,3 +91,12 @@ export function nameFromScriptURL (path: string): string {
 export function genCacheBust (): number {
     return Math.ceil(Math.random() * 10000);
 }
+
+export const scriptFetchHeaders = new Headers();
+scriptFetchHeaders.append('pragma', 'no-cache');
+scriptFetchHeaders.append('cache-control', 'no-cache');
+
+export const scriptFetchInit = {
+    method: 'GET',
+    headers: scriptFetchHeaders,
+};

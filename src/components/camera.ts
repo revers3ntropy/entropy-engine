@@ -1,6 +1,7 @@
 import {Component} from "../ECS/component";
 import {v2, v3} from "../maths/maths";
-import {getCanvasSize, getZoomScaledPosition, JSONifyComponent} from "../util/general";
+import {JSONifyComponent} from "../util/general";
+import {getCanvasSize, getZoomScaledPosition} from '../util/rendering';
 import type {Entity} from "../ECS/entity";
 
 export class Camera extends Component {

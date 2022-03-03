@@ -1,11 +1,10 @@
 import {Systems} from "../../ECS/system";
-import {Scene} from "../../ECS/scene";
 import {image} from "./basicShapes";
 import {Camera} from "../../components/camera";
 import {Entity} from "../../ECS/entity";
 import {v2} from "../../maths/v2";
 import {colour, rgb} from "../../util/colour";
-import {getCanvasSize} from "../../util/general";
+import {canvases, getCanvasSize, getCTX, resetCanvasRot} from '../../util/rendering';
 import {GUIElement} from "../../components/gui/guiElement";
 import {Renderer} from '../../components/renderer';
 
@@ -20,14 +19,20 @@ function orderSpritesForRender (sprites: Entity[]): Entity[] {
     let justSprites = [];
     let justGUI = [];
     for (let sprite of zOrderedSprites) {
-        if (sprite.hasComponent('GUIElement'))
+        if (sprite.hasComponent('GUIElement')) {
             justGUI.push(sprite);
-        else
+        } else {
             justSprites.push(sprite);
+        }
     }
 
     return [...justSprites, ...justGUI];
 }
+
+export function clearCanvas (canvas: HTMLCanvasElement) {
+    getCTX(canvas).clearRect(0, 0, canvas.width, canvas.height);
+}
+
 
 export function renderBackground (ctx: CanvasRenderingContext2D, canvasSize: v2, backgroundTint: colour, backgroundImage: string | undefined) {
 
@@ -59,13 +64,16 @@ export function renderBackground (ctx: CanvasRenderingContext2D, canvasSize: v2,
 }
 
 
-export function renderAll (entities: Entity[], canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, backgroundTint: colour, backgroundImage: string | undefined, cameraEntity: Entity = Camera.main) {
+export function renderAll (entities: Entity[], canvases: canvases, backgroundTint: colour, backgroundImage: string | undefined, cameraEntity: Entity = Camera.main) {
 
     // background
-    const canvasSize = getCanvasSize(canvas);
+    const canvasSize = getCanvasSize(canvases.render);
     const mid = canvasSize.clone.scale(0.5);
 
-    renderBackground(ctx, canvasSize, backgroundTint, backgroundImage);
+    clearCanvas(canvases.render);
+
+    renderBackground(getCTX(canvases.background), canvasSize, backgroundTint, backgroundImage);
+
     if (!entities) return;
 
     if (!cameraEntity) {
@@ -122,14 +130,20 @@ export function renderAll (entities: Entity[], canvas: HTMLCanvasElement, ctx: C
 Systems.systems.push({
     name: 'Renderer',
 
-    Start: () => {},
+    Start: (scene, canvases) => {
+        resetCanvasRot(canvases.render);
+        resetCanvasRot(canvases.input);
+        resetCanvasRot(canvases.GUI);
 
-    Update: (scene: Scene) => {
-        const ctx = scene.settings.ctx;
-        if (!ctx) {
-            return;
-        }
-        renderAll(scene.entities, ctx.canvas, ctx, scene.settings.backgroundTint, scene.settings.backgroundImage);
+        clearCanvas(canvases.GUI);
+        clearCanvas(canvases.input);
+        clearCanvas(canvases.render);
+    },
+
+    Update: (scene, canvases) => {
+        const ctx = canvases.render.getContext('2d');
+        if (!ctx) throw 'no ctx on canvas';
+        renderAll(scene.entities, canvases.render, ctx, scene.settings.backgroundTint, scene.settings.backgroundImage);
     },
 
     order: 10

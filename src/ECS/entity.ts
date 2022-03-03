@@ -214,14 +214,16 @@ export class Entity {
     static findWithTag (tag: string) {
         let entities: Entity[] = [];
         Entity.loop((entity: Entity) => {
-            if (entity.tag === tag)
+            if (entity.tag === tag) {
                 entities.push(entity);
+            }
         });
         return entities;
     }
 
     static loop (handler: (entity: Entity) => void) {
-        for (const entity of Entity.entities)
+        for (const entity of Entity.entities) {
             handler(entity);
+        }
     }
 }
