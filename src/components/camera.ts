@@ -15,7 +15,7 @@ export class Camera extends Component {
         far = 1000,
         near = 0.1,
         fov = 90
-    }) {
+    }={}) {
         super('Camera');
 
         this.addPublic({

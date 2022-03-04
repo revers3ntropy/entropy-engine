@@ -5,3 +5,4 @@ webpack.config.js
 /test/
 /.idea/
 /src/
+webpack-log.txt

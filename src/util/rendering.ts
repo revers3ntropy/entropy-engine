@@ -36,6 +36,26 @@ function setCanvasStyle (c: HTMLCanvasElement, z: string, div: HTMLElement, size
     c.height = size.y;
 }
 
+export function setCanvasesSizes (canvases: canvases) {
+    const div = canvases.background.parentElement;
+    if (!div) throw 'no parent element of canvases';
+
+    const size = new v2(div.parentElement?.clientWidth || 0, div.parentElement?.clientHeight);
+
+    // input on top as it must be 'touching' the cursor
+    setCanvasStyle(canvases.input, '4', div, size);
+    // GUI is top layer of rendering
+    setCanvasStyle(canvases.GUI, '3', div, size);
+    // render is above the background
+    setCanvasStyle(canvases.render, '2', div, size);
+    setCanvasStyle(canvases.background, '1', div, size);
+
+    resetCanvasRot(canvases.input);
+    resetCanvasRot(canvases.GUI);
+    resetCanvasRot(canvases.render);
+    resetCanvasRot(canvases.background);
+}
+
 export function generateCanvas (divID: string): canvases {
     let div = document.getElementById(divID);
     if (!div) {
@@ -59,12 +79,10 @@ export function generateCanvas (divID: string): canvases {
     background.id = 'EntropyEngine-background-Layer';
     input.id = 'EntropyEngine-input-Layer';
 
-    setCanvasStyle(GUI, '4', div, size);
-    setCanvasStyle(render, '3', div, size);
-    setCanvasStyle(input, '2', div, size);
-    setCanvasStyle(background, '1', div, size);
+    const canvases = { GUI, input, render, background };
+    setCanvasesSizes(canvases);
 
-    return { GUI, input, render, background };
+    return canvases;
 }
 
 export function getCTX (canvas: HTMLCanvasElement): CanvasRenderingContext2D {

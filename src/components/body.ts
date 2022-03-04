@@ -16,7 +16,7 @@ export class Body extends Component {
         friction = 0.1,
         airResistance = 0.1,
         bounciness = 0.2,
-    }) {
+    }={}) {
         super("Body");
 
         this.addPublic({

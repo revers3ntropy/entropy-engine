@@ -4,18 +4,18 @@ export class soundEmitter extends Component {
     src = '';
     sound: HTMLAudioElement;
 
-    constructor (config: {
-        src: string
-    }) {
+    constructor ({
+        src = ''
+    }={}) {
         super('soundEmitter');
 
         this.addPublic({
             name: 'src',
-            value: config.src,
+            value: src,
         });
 
         this.sound = document.createElement<'audio'>("audio");
-        this.sound.src = config.src;
+        this.sound.src = src;
         this.sound.setAttribute("preload", "auto");
         this.sound.setAttribute("controls", "none");
         this.sound.style.display = "none";

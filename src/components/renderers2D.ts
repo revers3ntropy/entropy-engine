@@ -45,7 +45,7 @@ export class CircleRenderer extends Renderer2D {
          radius = 1,
          offset = new v2(0, 0),
          colour = rgb()
-     }) {
+    }={}) {
         super("CircleRenderer", offset);
 
         this.addPublic({
@@ -87,7 +87,7 @@ export class RectRenderer extends Renderer2D {
          offset = new v2(0, 0),
          width= 1,
          colour = rgb(0, 0, 0),
-    }) {
+    }={}) {
         super("RectRenderer", offset);
 
         this.addPublic({
@@ -153,8 +153,8 @@ export class ImageRenderer2D extends Renderer2D {
          height = 1,
          offset = new v2(0, 0),
          width= 1,
-         url= '',
-     }) {
+         url= ''
+    }={}) {
         super("ImageRenderer2D", offset);
 
         this.addPublic({
@@ -175,7 +175,7 @@ export class ImageRenderer2D extends Renderer2D {
         });
     }
 
-    Start(): void {}
+    Start () {}
 
     draw (arg: drawArgs): void {
         if (!this.url) {

@@ -21,7 +21,7 @@ export class Transform extends Component {
         scale?: v3,
         rotation?: v3,
         parent?: Transform | number
-    }) {
+    } = {}) {
         super('Transform');
 
         this.addPublic({

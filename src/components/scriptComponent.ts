@@ -17,7 +17,7 @@ export class Script extends Component {
         path?: string,
         name?: string,
         script?: ESNamespace | nativeScript
-    }) {
+    }={}) {
         super("Script", name || (path || '').split('/').pop() || 'noscript');
         if (path) {
             this.path = path;

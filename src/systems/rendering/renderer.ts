@@ -1,5 +1,5 @@
 import {Systems} from "../../ECS/system";
-import {image} from "./basicShapes";
+import {image, rect} from './basicShapes';
 import {Camera} from "../../components/camera";
 import {Entity} from "../../ECS/entity";
 import {v2} from "../../maths/v2";
@@ -31,7 +31,10 @@ function orderSpritesForRender (sprites: Entity[]): Entity[] {
 }
 
 export function clearCanvas (canvas: HTMLCanvasElement) {
-    getCTX(canvas).clearRect(0, 0, canvas.width, canvas.height);
+    const ctx = getCTX(canvas);
+    ctx.beginPath();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
 }
 
 export function renderBackground (ctx: CanvasRenderingContext2D, backgroundTint: colour, backgroundImage: string | undefined) {
@@ -41,20 +44,14 @@ export function renderBackground (ctx: CanvasRenderingContext2D, backgroundTint:
         bgColour = bgColour.clone;
         bgColour.alpha = alpha;
 
-        ctx.beginPath();
-
-        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-        ctx.fillStyle = bgColour.hex;
-
-        ctx.fill();
-        ctx.closePath();
+        rect(ctx, v2.zero, ctx.canvas.width, ctx.canvas.height, bgColour.rgba);
     }
 
     if (!backgroundImage) {
         fillBackground(1);
         return;
     }
+
     // if it can't use the image as a background, then just use the colour
     try {
         image(ctx, v2.zero, getCanvasSize(ctx.canvas), backgroundImage);
@@ -70,16 +67,17 @@ export function renderAll (entities: Entity[], canvases: canvases, backgroundTin
     const canvasSize = getCanvasSize(canvases.render);
     const mid = canvasSize.clone.scale(0.5);
 
-    clearCanvas(canvases.render);
     clearCanvas(canvases.background);
+    clearCanvas(canvases.render);
     clearCanvas(canvases.GUI);
+    clearCanvas(canvases.render);
 
     renderBackground(getCTX(canvases.background), backgroundTint, backgroundImage);
 
     if (!entities) return;
 
     if (!cameraEntity) {
-        console.error('Camera was not passed to renderAll function! Main camera: ' + Camera.main.name);
+        console.error(`Camera was not passed to renderAll. Main camera is '${Camera.main.name}'`);
         return;
     }
 

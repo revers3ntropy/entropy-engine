@@ -118,12 +118,13 @@ export function image (ctx: CanvasRenderingContext2D, position: v2, size: v2, sr
     rotateAroundPointWrapper(ctx, position.clone.add(size.clone.scale(0.5)), rotDeg, () => {
         position = position.clone;
         ctx.beginPath();
+
         let img = new Image;
         img.src = src;
         const center = position.clone.add(size.clone.scale(0.5));
         // center rotation on image
         ctx.translate(center.x, center.y);
-        ctx.rotate(Math.PI);
+        //ctx.rotate(Math.PI);
         ctx.scale(-1, 1);
         ctx.translate(-center.x, -center.y);
 
@@ -131,9 +132,10 @@ export function image (ctx: CanvasRenderingContext2D, position: v2, size: v2, sr
 
         // undo 180 transform
         ctx.translate(center.x, center.y);
-        ctx.rotate(-Math.PI);
+        //ctx.rotate(-Math.PI);
         ctx.scale(-1, 1);
         ctx.translate(-center.x, -center.y);
+
         ctx.closePath();
     });
 }

@@ -8,7 +8,7 @@ import { GUIElement, GUITextBox } from "./components/gui/gui";
 import { entitiesFromJSON, initialiseScenes } from './JSONprocessor';
 import {Camera} from "./components/camera";
 import {scriptFetchInit} from './util/general';
-import {generateCanvas} from './util/rendering';
+import {generateCanvas, setCanvasesSizes} from './util/rendering';
 import {rgb} from './util/colour';
 import {Scene} from './ECS/scene';
 import {Systems} from "./ECS/system";
@@ -94,7 +94,9 @@ export function EntropyEngine ({
     }
 
     async function run () {
+        setCanvasesSizes(canvases);
         await init();
+        setCanvasesSizes(canvases);
         window.requestAnimationFrame(tick);
     }
 

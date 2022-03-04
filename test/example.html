@@ -16,49 +16,66 @@
     const { run } = ee.EntropyEngine();
 
 	const main = Scene.create({
-        name: 'main',
         settings: {
-			backgroundTint: rgb(20)
+            backgroundTint: rgb(200),
+            globalGravity: new v3(0, -1)
         }
     });
 
 	main.entities.push(Entity.new({
-        name: 'camera',
         components: [
-			new ee.Camera({})
+			new ee.Camera
         ]
     }));
 
-	main.entities.push(Entity.new({
-		name: 'box',
-		components: [
-			new ee.RectCollider({}),
-            new ee.RectRenderer({}),
-            new ee.Script({
-                name: 'script',
-                script: {
-					Update: (self) => {
-						if (input.a) {
-							self.transform.position.x -= 1;
-                        }
-						if (input.d) {
-							self.transform.position.x += 1;
-						}
-						if (input.w) {
-							self.transform.position.y += 1;
-						}
-						if (input.s) {
-							self.transform.position.y -= 1;
-						}
-                    }
-                }
+	function block (scale, position) {
+        main.entities.push(Entity.new({
+            components: [
+                new ee.RectRenderer,
+                new ee.RectCollider,
+                new ee.Body
+            ],
+            transform: new ee.Transform({ position, scale })
+        }));
+    }
+
+    main.entities.push(Entity.new({
+        components: [
+            new ee.CircleRenderer,
+            new ee.CircleCollider,
+            new ee.Body,
+            new ee.Script({ script: {
+                Update: (self) => {
+                    self.transform.position.set(input.cursorPosWorldSpace);
+                }}
             })
-		],
+        ],
         transform: new ee.Transform({
-            position: new v3(50, 50),
-            scale: new v3(50, 50)
+            scale: new v3(50)
         })
-	}));
+    }));
+
+    for (let i = 0; i < 10; i++) {
+        block(
+            new v3(Math.random() * 60 + 40, Math.random() * 60 + 40),
+            new v3((Math.random()-0.5) * 500, (Math.random()-0.5) * 500)
+        );
+    }
+
+
+    main.entities.push(Entity.new({
+        Static: true,
+        components: [
+            new ee.RectRenderer,
+            new ee.RectCollider,
+            new ee.Body
+        ],
+        transform: new ee.Transform({
+            position: new v3(0, -300),
+            scale: new v3(1000, 50)
+        })
+    }));
+
 
 	run();
 </script>

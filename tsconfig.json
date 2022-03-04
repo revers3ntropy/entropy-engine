@@ -6,7 +6,11 @@
     "lib": [ "es2016", "dom" ],
     "strict": true,
     "typeRoots": [
-      "src/types"
+      "src/types",
+      "node_modules/@types"
+    ],
+    "types": [
+      "resize-observer-browser"
     ],
     "moduleResolution": "Node"
   },

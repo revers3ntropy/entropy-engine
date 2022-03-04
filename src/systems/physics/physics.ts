@@ -71,7 +71,7 @@ Systems.systems.push({
         } else throw Error('Unkown Collider type');
 
         for (let vert of newVerts) {
-            //vert.body = mBody;
+            (vert as any).body = mBody;
         }
 
         mBody.vertices = newVerts;
@@ -81,11 +81,11 @@ Systems.systems.push({
         if (entity.Static) {
             mBody.velocity = Matter.Vector.create(0, 0);
             mBody.force = Matter.Vector.create(0, 0);
-            //mBody.positionPrev = mBody.position;
+            (mBody as any).positionPrev = mBody.position;
         }
 
         if (isStart) {
-            //mBody.positionPrev = mBody.position;
+            (mBody as any).positionPrev = mBody.position;
         }
     },
 
@@ -133,8 +133,9 @@ Systems.systems.push({
 
         // UPDATE
         for (let entity of scene.entities) {
-            if (!entity.hasComponent('Collider'))
+            if (!entity.hasComponent('Collider')) {
                 continue;
+            }
 
             let collider = entity.getComponent<Collider>('Collider');
 

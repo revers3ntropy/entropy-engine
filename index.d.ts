@@ -612,7 +612,7 @@ declare module 'entropy-engine' {
     class CircleCollider extends Collider {
         radius: number;
 
-        constructor (props: {
+        constructor (props?: {
             radius?: number,
             solid?: boolean,
             offset?: v2,
@@ -623,7 +623,7 @@ declare module 'entropy-engine' {
         width: number;
         height: number;
 
-        constructor (props: {
+        constructor (props?: {
             width?: number,
             height?: number,
             solid?: boolean,
@@ -640,7 +640,7 @@ declare module 'entropy-engine' {
         airResistance: number;
         bounciness: number;
 
-        constructor (props: {
+        constructor (props?: {
             velocity: v3,
             mass: number,
             friction: number,
@@ -691,7 +691,7 @@ declare module 'entropy-engine' {
         width: number;
         colour: colour;
 
-        constructor (props: {
+        constructor (props?: {
             height?: number,
             offset?: v2,
             width?: number,
@@ -707,7 +707,7 @@ declare module 'entropy-engine' {
         width: number;
         url: string;
 
-        constructor (props: {
+        constructor (props?: {
             height?: number,
             offset?: v2,
             width?: number,
@@ -723,7 +723,7 @@ declare module 'entropy-engine' {
         near: number;
         fov: number;
 
-        constructor (props: {
+        constructor (props?: {
             zoom?: number,
             far?: number,
             near?: number,

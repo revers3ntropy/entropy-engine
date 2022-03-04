@@ -4,7 +4,7 @@ import {v2} from "./maths/v2";
 import {Entity} from "./ECS/entity";
 import {GUIElement, GUITextBox} from "./components/gui/gui";
 import {Camera} from "./components/camera";
-import {canvases, getCTX} from './util/rendering';
+import {canvases, getCTX, setCanvasesSizes} from './util/rendering';
 
 export function getMousePos(canvas: HTMLCanvasElement, event: MouseEvent) {
     let rect = canvas.getBoundingClientRect();
@@ -75,8 +75,9 @@ document.addEventListener('keydown', event => {
 
         const element = sprite.getComponent<GUITextBox>('GUIElement', 'GUITextBox');
 
-        if (element.selected)
+        if (element.selected) {
             element.backspace();
+        }
     });
 });
 
@@ -90,6 +91,16 @@ export function setMousePos(event: any, canvas: HTMLCanvasElement) {
  */
 export function addEventListeners (canvases: canvases, isInitialised: () => boolean) {
     const canvas = canvases.input;
+
+    const div = canvas.parentElement;
+    if (!div) throw 'no parent to canvas';
+
+    // keep canvases the same size as parent div when parent div changes size
+    // this is a new API, not sure about compatibility with browsers
+    // other than chrome tbh.
+    new ResizeObserver(() => {
+        setCanvasesSizes(canvases);
+    }).observe(div);
 
     // managers and constants
     canvas.addEventListener('mousemove', (evt: any) => {

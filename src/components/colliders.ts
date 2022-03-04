@@ -41,7 +41,7 @@ export class CircleCollider extends Collider {
          radius = 1,
          solid = true,
          offset = new v2(0, 0),
-     }) {
+    }={}) {
         super("CircleCollider", solid, offset,
             Matter.Bodies.circle(0, 0, radius, {})
         );
@@ -84,7 +84,12 @@ export class RectCollider extends Collider {
     width = 0;
     height = 0;
 
-    constructor ({ width = 1, height = 1, solid = true, offset = new v2(0, 0) }) {
+    constructor ({
+        width = 1,
+        height = 1,
+        solid = true,
+        offset = new v2(0, 0)
+    }={}) {
         super("RectCollider", solid, offset,
             Matter.Bodies.rectangle(0, 0, width, height, {})
         );
