@@ -8,7 +8,7 @@ import { GUIElement, GUITextBox } from "./components/gui/gui";
 import { entitiesFromJSON, initialiseScenes } from './JSONprocessor';
 import {Camera} from "./components/camera";
 import {scriptFetchInit} from './util/general';
-import {generateCanvas, setCanvasesSizes} from './util/rendering';
+import {generateCanvas, getCTX, setCanvasesSizes} from './util/rendering';
 import {rgb} from './util/colour';
 import {Scene} from './ECS/scene';
 import {Systems} from "./ECS/system";
@@ -75,6 +75,10 @@ export function EntropyEngine ({
     async function init () {
 
         if (licenseLevel < 2) {
+
+            const ctx = getCTX(canvases.GUI);
+
+            ctx.transform(1, 0, 0, -1, 0, canvases.GUI.height);
             await startAnimation(guiCanvas);
         }
 
