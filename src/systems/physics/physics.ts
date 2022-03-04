@@ -14,7 +14,7 @@ Systems.systems.push({
     engine: Matter.Engine.create(),
     runner: Matter.Runner.create(),
 
-    Start: function (scene, canvases) {
+    Start: function (scene) {
 
         for (let entity of scene.entities) {
             if (!entity.hasComponent('Body')) continue;
@@ -68,7 +68,7 @@ Systems.systems.push({
                 r
             ).vertices;
 
-        } else throw Error('Unkown Collider type');
+        } else throw Error('Unknown Collider type');
 
         for (let vert of newVerts) {
             (vert as any).body = mBody;
@@ -113,8 +113,9 @@ Systems.systems.push({
             if (collideRes.length > 0) {
                 for (let res of collideRes) {
                     let collidedWithMBody = res.bodyB;
-                    if (Object.is(collidedWithMBody, mBody))
+                    if (Object.is(collidedWithMBody, mBody)) {
                         collidedWithMBody = res.bodyA;
+                    }
 
                     const pair = pairs.find(([mBody]) => Object.is(mBody, collidedWithMBody))
                     if (pair === undefined) throw Error();
@@ -125,7 +126,7 @@ Systems.systems.push({
         }
     },
 
-    Update: function (scene, canvases) {
+    Update: function (scene) {
 
         const bodies: [Matter.Body, Entity][] = [];
 

@@ -1,9 +1,5 @@
 import {v2} from "../../maths/v2";
 
-export function reset (ctx: CanvasRenderingContext2D) {
-    ctx.transform(1, 0, 0, -1, 0, ctx.canvas.height);
-}
-
 export function rotateAroundPointWrapper (ctx: CanvasRenderingContext2D, p: v2, theta: number, cb: () => void) {
     ctx.translate(p.x, p.y);
     ctx.rotate(theta * Math.PI / 180);
@@ -103,12 +99,22 @@ export function text (
     rotateAroundPointWrapper(ctx, center, rotDeg, () => {
         ctx.beginPath();
 
+        ctx.translate(center.x, center.y);
+        ctx.rotate(Math.PI);
+        ctx.scale(-1, 1);
+        ctx.translate(-center.x, -center.y);
+
         ctx.font = `${fontSize}px ${font}`;
         ctx.fillStyle = colour;
         ctx.textBaseline = "middle";
         ctx.textAlign = alignment as CanvasTextAlign;
 
         ctx.fillText(text, position.x, position.y);
+
+        ctx.translate(center.x, center.y);
+        ctx.rotate(-Math.PI);
+        ctx.scale(-1, 1);
+        ctx.translate(-center.x, -center.y);
 
         ctx.closePath();
     });
@@ -124,7 +130,7 @@ export function image (ctx: CanvasRenderingContext2D, position: v2, size: v2, sr
         const center = position.clone.add(size.clone.scale(0.5));
         // center rotation on image
         ctx.translate(center.x, center.y);
-        //ctx.rotate(Math.PI);
+        ctx.rotate(Math.PI);
         ctx.scale(-1, 1);
         ctx.translate(-center.x, -center.y);
 
@@ -132,7 +138,7 @@ export function image (ctx: CanvasRenderingContext2D, position: v2, size: v2, sr
 
         // undo 180 transform
         ctx.translate(center.x, center.y);
-        //ctx.rotate(-Math.PI);
+        ctx.rotate(-Math.PI);
         ctx.scale(-1, 1);
         ctx.translate(-center.x, -center.y);
 

@@ -3,6 +3,7 @@ import {Transform} from "../transform";
 import {GUIElement} from "./gui";
 import {text} from '../../systems/rendering/basicShapes'
 import {v2} from "../../maths/v2";
+import { getCanvasSize } from "../../util/rendering";
 
 export class GUIText extends GUIElement {
     text = '';
@@ -58,11 +59,16 @@ export class GUIText extends GUIElement {
             type: 'boolean',
             default: true
         });
-
     }
 
     draw (ctx: CanvasRenderingContext2D, transform: Transform) {
-        text(ctx, this.text, this.fontSize * transform.scale.x, this.font, this.colour.rgba, transform.position.v2);
+        text(ctx, this.text, this.fontSize * transform.scale.x, this.font, this.colour.rgba,
+            transform.position.v2
+                // center
+                .add(getCanvasSize(ctx.canvas).scale(0.5))
+                // move down to be central in line
+                .sub(new v2(0, this.fontSize * transform.scale.x * 0.5))
+        );
     }
 
     touchingPoint (point: v2, ctx: CanvasRenderingContext2D, transform: Transform) {
