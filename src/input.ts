@@ -1,11 +1,10 @@
-import {Collider} from './components/colliders.js';
-import {Scene} from './ECS/scene.js';
+import {Collider} from './components/colliders';
+import {Scene} from './ECS/scene';
 import {v2} from "./maths/v2";
 import {Entity} from "./ECS/entity";
 import {GUIElement, GUITextBox} from "./components/gui/gui";
 import {Camera} from "./components/camera";
-import {setCanvasSize} from './util/general.js';
-import {canvases, getCTX} from './util/rendering.js';
+import {canvases, getCTX} from './util/rendering';
 
 export function getMousePos(canvas: HTMLCanvasElement, event: MouseEvent) {
     let rect = canvas.getBoundingClientRect();
@@ -43,41 +42,25 @@ export const input: {[k: string]: any} = {
     'cursorPosition': v2.zero,
     'cursorPosWorldSpace': v2.zero
 };
-// init input for keycodes
-for (let i = 8; i < 123; i++) {
-    input[i] = false;
-    input[String.fromCharCode(i)] = i;
-}
-
-input.Space = 32;
-input.Enter = 13;
-input.Shift = 16;
-input.Backspace = 8;
-input.Ctrl = 17;
-input.Alt = 18;
-input.CmdR = 93;
-input.CmdL = 91;
-input.WindowsKey = 91;
-input.Left = 37;
-input.Right = 39;
-input.Up = 38;
-input.Down = 40;
 
 document.addEventListener('keydown', event => {
-    input[event.keyCode] = true;
+    input[event.key] = true;
 });
 
 document.addEventListener('keyup', event => {
-    input[event.keyCode] = false;
+    input[event.key] = false;
 });
 
 document.addEventListener('keypress', event => {
     Entity.loop(sprite => {
-        if (!sprite.hasComponent('GUIElement', 'GUITextBox')) return;
+        if (!sprite.hasComponent('GUIElement', 'GUITextBox')) {
+            return;
+        }
 
         const element = sprite.getComponent<GUITextBox>('GUIElement', 'GUITextBox');
-        if (element.selected)
+        if (element.selected) {
             element.keyPress(event);
+        }
     });
 });
 
@@ -107,11 +90,6 @@ export function setMousePos(event: any, canvas: HTMLCanvasElement) {
  */
 export function addEventListeners (canvases: canvases, isInitialised: () => boolean) {
     const canvas = canvases.input;
-    canvas?.parentNode?.addEventListener('resize', () => {
-        // TO-DO: this doesn't work
-        setCanvasSize(canvases);
-    });
-
 
     // managers and constants
     canvas.addEventListener('mousemove', (evt: any) => {

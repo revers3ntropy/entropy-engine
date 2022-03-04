@@ -1,11 +1,9 @@
 import {Systems} from "../../ECS/system";
-import {Scene} from "../../ECS/scene";
 import type {Body} from "../../components/body";
 import {CircleCollider, Collider, RectCollider} from "../../components/colliders";
 import {Entity} from "../../ECS/entity";
 import {v3} from "../../maths/v3";
 import {Script} from "../../components/scriptComponent";
-import {canvases} from '../../util/rendering';
 
 import * as Matter from 'matter-js';
 import {ESJSBinding} from 'entropy-script';

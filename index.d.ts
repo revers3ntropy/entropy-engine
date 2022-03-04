@@ -7,7 +7,7 @@ declare module 'entropy-engine' {
         run: () => Promise<void>
     };
 
-    function EntropyEngine (props: {
+    function EntropyEngine (props?: {
         canvasID?: string,
         performanceDebug?: number
     }): ESReturns;
@@ -413,17 +413,22 @@ declare module 'entropy-engine' {
         setPublicTypeCheck (name: string, value: any): void;
     }
 
+    type nativeScript = {
+        [k: string]: any,
+    };
+
     class Script extends Component {
-        script: ESNamespace | undefined;
+        script: ESNamespace | nativeScript | undefined;
         name: string;
         path: string;
 
-        constructor ({ path, script }: {
-            path: string,
-            script?: ESNamespace
+        constructor ({ path, script, name }: {
+            path?: string,
+            name?: string,
+            script?: ESNamespace | nativeScript
         });
 
-        jsonPublic (): object[];
+        public jsonPublic (): object[];
 
         json (): any;
 
@@ -431,6 +436,7 @@ declare module 'entropy-engine' {
 
         Update (): void;
     }
+
 
 
     class Entity {
@@ -534,8 +540,6 @@ declare module 'entropy-engine' {
         license: string;
         version: string;
         gameName: string;
-        canvasID: string;
-        ctx?: CanvasRenderingContext2D;
         maxFrameRate: number;
         timeScale: number;
         backgroundTint: colour,

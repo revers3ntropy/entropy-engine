@@ -20,7 +20,7 @@ module.exports = {
 	output: {
 		filename: version + '.js',
 		path: path.resolve(__dirname, 'build'),
-		libraryTarget: "commonjs2"
+		library: 'ee'
 	},
 	mode: 'production',
 	devtool: 'source-map',

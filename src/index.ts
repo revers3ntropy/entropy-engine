@@ -7,8 +7,8 @@ import {addEventListeners, getMousePos, input} from './input';
 import { GUIElement, GUITextBox } from "./components/gui/gui";
 import { entitiesFromJSON, initialiseScenes } from './JSONprocessor';
 import {Camera} from "./components/camera";
-import {scriptFetchInit, setCanvasSize} from './util/general';
-import {generateCanvas} from './util/rendering.js';
+import {scriptFetchInit} from './util/general';
+import {generateCanvas} from './util/rendering';
 import {rgb} from './util/colour';
 import {Scene} from './ECS/scene';
 import {Systems} from "./ECS/system";
@@ -61,7 +61,7 @@ export * from './systems/rendering/startAnimation';
 export function EntropyEngine ({
     canvasContainerID= "entropy-engine",
     performanceDebug = 0
-}) {
+} = {}) {
 
     // for the event listeners
     let isInitialised = false;
@@ -69,8 +69,6 @@ export function EntropyEngine ({
     const licenseLevel = license('');
     const canvases = generateCanvas(canvasContainerID);
     const { GUI: guiCanvas } = canvases;
-    
-    setCanvasSize(canvases);
 
     addEventListeners(canvases, () => isInitialised);
 

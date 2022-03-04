@@ -108,18 +108,7 @@ export function text (
         ctx.textBaseline = "middle";
         ctx.textAlign = alignment as CanvasTextAlign;
 
-        // flip text as the whole canvas is actually flipped
-        ctx.translate(center.x, center.y);
-        ctx.rotate(Math.PI);
-        ctx.scale(-1, 1);
-        ctx.translate(-center.x, -center.y);
-
         ctx.fillText(text, position.x, position.y);
-
-        ctx.translate(center.x, center.y);
-        ctx.rotate(-Math.PI);
-        ctx.scale(-1, 1);
-        ctx.translate(-center.x, -center.y);
 
         ctx.closePath();
     });

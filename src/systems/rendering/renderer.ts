@@ -7,6 +7,7 @@ import {colour, rgb} from "../../util/colour";
 import {canvases, getCanvasSize, getCTX, resetCanvasRot} from '../../util/rendering';
 import {GUIElement} from "../../components/gui/guiElement";
 import {Renderer} from '../../components/renderer';
+import { Scene } from "../../ECS/scene";
 
 function orderSpritesForRender (sprites: Entity[]): Entity[] {
     // sort the entities by their z position
@@ -33,8 +34,7 @@ export function clearCanvas (canvas: HTMLCanvasElement) {
     getCTX(canvas).clearRect(0, 0, canvas.width, canvas.height);
 }
 
-
-export function renderBackground (ctx: CanvasRenderingContext2D, canvasSize: v2, backgroundTint: colour, backgroundImage: string | undefined) {
+export function renderBackground (ctx: CanvasRenderingContext2D, backgroundTint: colour, backgroundImage: string | undefined) {
 
     function fillBackground (alpha: number) {
         let bgColour = backgroundTint || rgb.parse('white');
@@ -43,9 +43,9 @@ export function renderBackground (ctx: CanvasRenderingContext2D, canvasSize: v2,
 
         ctx.beginPath();
 
-        ctx.rect(0, 0, canvasSize.x, canvasSize.y);
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        ctx.fillStyle = bgColour.rgba;
+        ctx.fillStyle = bgColour.hex;
 
         ctx.fill();
         ctx.closePath();
@@ -57,22 +57,24 @@ export function renderBackground (ctx: CanvasRenderingContext2D, canvasSize: v2,
     }
     // if it can't use the image as a background, then just use the colour
     try {
-        image(ctx, v2.zero, canvasSize, backgroundImage, 0);
+        image(ctx, v2.zero, getCanvasSize(ctx.canvas), backgroundImage);
     } catch {
         fillBackground(0.1);
     }
 }
 
 
-export function renderAll (entities: Entity[], canvases: canvases, backgroundTint: colour, backgroundImage: string | undefined, cameraEntity: Entity = Camera.main) {
+export function renderAll (entities: Entity[], canvases: canvases, backgroundTint: colour, backgroundImage?: string, cameraEntity: Entity = Camera.main) {
 
     // background
     const canvasSize = getCanvasSize(canvases.render);
     const mid = canvasSize.clone.scale(0.5);
 
     clearCanvas(canvases.render);
+    clearCanvas(canvases.background);
+    clearCanvas(canvases.GUI);
 
-    renderBackground(getCTX(canvases.background), canvasSize, backgroundTint, backgroundImage);
+    renderBackground(getCTX(canvases.background), backgroundTint, backgroundImage);
 
     if (!entities) return;
 
@@ -87,11 +89,11 @@ export function renderAll (entities: Entity[], canvases: canvases, backgroundTin
 
     if (!camera) return;
 
-    const cameraPos = cameraEntity.transform.position.clone
-        .sub(
-            canvasSize
-                .clone
-                .scale(0.5).v3
+    const cameraPos = cameraEntity.transform
+        .position.clone
+        .sub(canvasSize
+            .clone
+            .scale(0.5).v3
         );
     // sub the screen size to put 0, 0 in the middle of the screen
 
@@ -108,7 +110,8 @@ export function renderAll (entities: Entity[], canvases: canvases, backgroundTin
     for (let sprite of orderSpritesForRender(entities)) {
         // deal with GUI and normal render components separately
         if (sprite.hasComponent('GUIElement')) {
-            sprite.getComponent<GUIElement>('GUIElement').draw(ctx, sprite.transform);
+            sprite.getComponent<GUIElement>('GUIElement')
+                .draw(getCTX(canvases.GUI), sprite.transform);
             continue;
         }
 
@@ -118,7 +121,7 @@ export function renderAll (entities: Entity[], canvases: canvases, backgroundTin
         sprite.getComponent<Renderer>('Renderer').draw({
             position: renderPos,
             transform: sprite.transform,
-            ctx,
+            ctx: getCTX(canvases.render),
             zoom: camera.zoom,
             center: mid,
             camera,
@@ -130,7 +133,7 @@ export function renderAll (entities: Entity[], canvases: canvases, backgroundTin
 Systems.systems.push({
     name: 'Renderer',
 
-    Start: (scene, canvases) => {
+    Start: (scene: Scene, canvases: canvases) => {
         resetCanvasRot(canvases.render);
         resetCanvasRot(canvases.input);
         resetCanvasRot(canvases.GUI);
@@ -140,10 +143,8 @@ Systems.systems.push({
         clearCanvas(canvases.render);
     },
 
-    Update: (scene, canvases) => {
-        const ctx = canvases.render.getContext('2d');
-        if (!ctx) throw 'no ctx on canvas';
-        renderAll(scene.entities, canvases.render, ctx, scene.settings.backgroundTint, scene.settings.backgroundImage);
+    Update: (scene: Scene, canvases: canvases) => {
+        renderAll(scene.entities, canvases, scene.settings.backgroundTint, scene.settings.backgroundImage);
     },
 
     order: 10

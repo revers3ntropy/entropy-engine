@@ -1,6 +1,6 @@
 {
     "name": "entropy-engine",
-    "version": "0.0.7b",
+    "version": "0.0.8",
     "description": "TypeScript Game Engine",
     "main": "index.js",
     "repository": {

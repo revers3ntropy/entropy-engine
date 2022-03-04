@@ -70,6 +70,10 @@ export class colour {
 
         return namedColours[val] || rgb(0, 0, 0);
     }
+
+    fromJSON ({ r, g, b }: { r: number, g: number, b: number }) {
+        return rgb(r, g, b);
+    }
 }
 
 export function rgb (red=0, green=red, blue=red): colour {

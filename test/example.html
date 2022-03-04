@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="height: 100%; margin: 0;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,12 +7,58 @@
     <title>EE Test Game</title>
     <script src="../build/latest.js"></script>
 </head>
-<body>
-    <canvas id="canvas"></canvas>
+<body style="height: 100%; margin: 0">
 </body>
 </html>
 
-<script>
-    ee.init();
+<script defer>
+    const { input, Entity, Scene, rgb, v3 } = ee;
+    const { run } = ee.EntropyEngine();
 
+	const main = Scene.create({
+        name: 'main',
+        settings: {
+			backgroundTint: rgb(20)
+        }
+    });
+
+	main.entities.push(Entity.new({
+        name: 'camera',
+        components: [
+			new ee.Camera({})
+        ]
+    }));
+
+	main.entities.push(Entity.new({
+		name: 'box',
+		components: [
+			new ee.RectCollider({}),
+            new ee.RectRenderer({}),
+            new ee.Script({
+                name: 'script',
+                script: {
+					Update: (self) => {
+						if (input.a) {
+							self.transform.position.x -= 1;
+                        }
+						if (input.d) {
+							self.transform.position.x += 1;
+						}
+						if (input.w) {
+							self.transform.position.y += 1;
+						}
+						if (input.s) {
+							self.transform.position.y -= 1;
+						}
+                    }
+                }
+            })
+		],
+        transform: new ee.Transform({
+            position: new v3(50, 50),
+            scale: new v3(50, 50)
+        })
+	}));
+
+	run();
 </script>

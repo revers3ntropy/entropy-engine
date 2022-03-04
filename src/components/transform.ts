@@ -120,10 +120,11 @@ export class Transform extends Component {
 
         // check for circular parenting
         if (this.recursiveChildren.includes(val.sprite)) {
-            for (const child of this.children)
+            for (const child of this.children) {
                 // shift children up one level if any of the
                 // children are becoming the parent of this entity
                 child.transform.parent = this.parent;
+            }
         }
 
         this.parent = val;

@@ -10,20 +10,6 @@ export function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function setCanvasSize (canvas: canvases) {
-
-    function set (c: HTMLCanvasElement) {
-        c.style.width = '100%';
-        c.style.height = '100%';
-        c.width  = c.offsetWidth;
-        c.height = c.offsetHeight;
-    }
-
-    set(canvas.input);
-    set(canvas.GUI);
-    set(canvas.render);
-}
-
 export function JSONifyComponent (component: any, type? : string) {
     let json: any = {};
 

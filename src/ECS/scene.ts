@@ -134,21 +134,7 @@ export class Scene {
 
     static scenes: Scene[] = [];
     
-    static active_: number = 0;
-
-    // @ts-ignore
-    static set active (val: number | Scene) {
-        if (val instanceof Scene) {
-            Scene.active_ = val.id;
-        } else {
-            Scene.active_ = val;
-        }
-    }
-
-    // @ts-ignore
-    static get active (): number {
-        return Scene.active_;
-    }
+    static active = 0;
 
     static get activeScene (): Scene {
         if (this.scenes.length < 1) {
@@ -188,10 +174,7 @@ export class Scene {
         )[0];
         
         if (scene === undefined) {
-            console.error(`Cannot find scene ID: ${id} of type ${typeof id}. Creating empty scene to compensate. Scenes: ${Scene.scenes}`);
-            const newScene = new Scene('Example Scene', defaultSceneSettings());
-            Scene.scenes.push(newScene);
-            return newScene;
+            throw `Cannot find scene ID: ${id} of type ${typeof id}. Scenes: ${Scene.scenes}`;
         }
         
         return scene;
@@ -201,21 +184,17 @@ export class Scene {
         name?: string,
         settings?: sceneSettings
     }) {
-        const scene = new Scene(config.name || 'Scene', config.settings || defaultSceneSettings());
-        Scene.scenes.push(scene);
+        const scene = new Scene(config.name || 'Scene', {
+            ...defaultSceneSettings(),
+            ...config.settings
+        });
 
-        if (Scene.scenes.length > 0 && !config.settings) {
-            const defaultSettings: any = Scene.scenes[Scene.scenes.length-1].json().settings;
-            defaultSettings.backgroundTint = new colour(255, 255, 255);
-            defaultSettings.globalGravity = v3.fromArray(defaultSettings.globalGravity);
-            scene.settings = defaultSettings;
-        }
+        Scene.scenes.push(scene);
 
         return scene;
     }
 
     static next (persists: Entity[]) {
-        // @ts-ignore
         Scene.active++;
         
         if (Scene.active > Scene.scenes.length-1) {

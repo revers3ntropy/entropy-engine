@@ -25,24 +25,50 @@ export type canvases = {
     background: HTMLCanvasElement
 }
 
+function setCanvasStyle (c: HTMLCanvasElement, z: string, div: HTMLElement, size: v2) {
+    c.style.position = 'absolute';
+    c.style.left = '0';
+    c.style.top = '0';
+    c.style.zIndex = z;
+    c.style.height = `${size.y}px`;
+    c.style.width = `${size.x}px`;
+    c.width  = size.x;
+    c.height = size.y;
+}
+
 export function generateCanvas (divID: string): canvases {
     let div = document.getElementById(divID);
     if (!div) {
-        div = document.appendChild(document.createElement('div'));
+        div = document.body.appendChild(document.createElement('div'));
     }
+
+    const size = new v2(div.parentElement?.clientWidth || 0, div.parentElement?.clientHeight);
+
+    div.innerHTML = ' ';
+
+    div.style.width = '100%';
+    div.style.height = '100%';
 
     const GUI = div.appendChild(document.createElement('canvas'));
     const render = div.appendChild(document.createElement('canvas'));
     const input = div.appendChild(document.createElement('canvas'));
     const background = div.appendChild(document.createElement('canvas'));
 
+    GUI.id = 'EntropyEngine-GUI-Layer';
+    render.id = 'EntropyEngine-render-Layer';
+    background.id = 'EntropyEngine-background-Layer';
+    input.id = 'EntropyEngine-input-Layer';
+
+    setCanvasStyle(GUI, '4', div, size);
+    setCanvasStyle(render, '3', div, size);
+    setCanvasStyle(input, '2', div, size);
+    setCanvasStyle(background, '1', div, size);
+
     return { GUI, input, render, background };
 }
 
 export function getCTX (canvas: HTMLCanvasElement): CanvasRenderingContext2D {
     const res = canvas.getContext('2d');
-    if (!res) {
-        throw 'no ctx on canvas';
-    }
+    if (!res) throw 'no ctx on canvas';
     return res;
 }
