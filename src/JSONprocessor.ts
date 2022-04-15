@@ -3,7 +3,7 @@ import {v2, v3} from "./maths/maths";
 import {Component} from "./ECS/component";
 import {Script} from "./components/scriptComponent";
 
-import {Context, run, ESNamespace, global, ESString} from 'entropy-script';
+import * as es from 'entropy-script';
 
 // all components
 import {CircleCollider, RectCollider} from './components/colliders';
@@ -14,6 +14,7 @@ import {Camera} from './components/camera';
 import { Transform} from "./components/transform";
 import {defaultSceneSettings, Scene, sceneSettings} from './ECS/scene';
 import {rgba} from "./util/colour";
+import { scriptFromURL } from "./scripting/scripts";
 
 type json = any;
 
@@ -109,43 +110,10 @@ async function dealWithScriptComponent (componentJSON: json): Promise<Script | v
     // two parts to a script: path and name
     const path = componentJSON['path'];
 
-    let scriptNode: ESNamespace | undefined;
+    const script = await scriptFromURL(path);
+    if (!script) return;
 
-    const fileName: string = path.split('/').pop();
-    
-    let scriptData = await fetch(`${path}?${cacheBust}`);
-    let code = await scriptData.text();
-
-    const env = new Context();
-    env.parent = global;
-    env.path = path;
-
-
-    const n = new ESNamespace(new ESString(fileName), {});
-
-    const res = run(code, {
-        env,
-        measurePerformance: false,
-        fileName,
-        currentDir: path,
-    });
-
-    n.__value__ = env.getSymbolTableAsDict();
-
-    if (res.error) {
-        console.log(res.error.str);
-        return;
-    }
-
-    scriptNode = n;
-    
-    // evaluate the script name as JS code, like when instantiating the component
     try {
-        const script = new Script({
-            script: scriptNode,
-            path
-        });
-
         // then override them with the saved values
         if (Array.isArray(componentJSON['public'])) {
             for (let field of componentJSON['public']) {
@@ -167,7 +135,7 @@ async function dealWithScriptComponent (componentJSON: json): Promise<Script | v
         return script;
 
     } catch (E) {
-        throw `Error initialising script '${fileName}': ${E}`;
+        throw `Error initialising script '${path}': ${E}`;
     }
 }
 

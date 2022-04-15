@@ -1,1 +1,1 @@
-export * from './build/stable';
+export * from './build/latest';

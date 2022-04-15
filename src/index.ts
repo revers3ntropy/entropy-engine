@@ -39,7 +39,7 @@ export {
     v2, TriangleV2, MeshV2, v3, TriangleV3, MeshV3,
 };
 
-export {init as initialiseEntropyScript } from './scripting/scripts';
+export { init as initialiseEntropyScript, scriptFromURL } from './scripting/scripts';
 
 export {entityConfig} from './ECS/entity';
 export {sceneSettings, defaultSceneSettings} from './ECS/scene';

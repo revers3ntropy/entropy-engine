@@ -1,22 +1,25 @@
-import {Component} from '../ECS/component';
+import { Component } from '../ECS/component';
 import type {Entity} from '../ECS/entity';
 import { v2, v3 } from '../maths/maths';
 
-import {global, Primitive, ESNamespace, ESFunction, ESJSBinding, ESString} from 'entropy-script';
+import { Primitive, ESNamespace, ESFunction, ESJSBinding, ESString, Map } from 'entropy-script';
+import { globalESContext } from "../scripting/scripts";
 
-type nativeScript = {
+type NativeScript = {
     [k: string]: any,
 };
 
 export class Script extends Component {
-    script: ESNamespace | nativeScript | undefined;
+    script?: ESNamespace | NativeScript;
     name = '';
     path = '';
 
-    constructor ({path, script, name}: {
+    methodWarnings: Map<boolean> = {};
+
+    constructor ({ path, script, name }: {
         path?: string,
         name?: string,
-        script?: ESNamespace | nativeScript
+        script?: ESNamespace | NativeScript
     }={}) {
         super("Script", name || (path || '').split('/').pop() || 'noscript');
         if (path) {
@@ -45,7 +48,6 @@ export class Script extends Component {
                 } else {
                     fieldJSON[prop] = field_[prop];
                 }
-
             }
 
             json.push(fieldJSON);
@@ -66,13 +68,20 @@ export class Script extends Component {
     runMethod = (functionName: string, entity: Entity | undefined, args: Primitive[] = []) => {
         if (this.script instanceof ESNamespace) {
             args = [new ESJSBinding(entity), ...args];
-            const method = this.script?.__getProperty__({context: global}, new ESString(functionName));
+
+            const method = this.script?.__get__({context: globalESContext},
+                new ESString(functionName));
 
             if (!(method instanceof ESFunction)) {
+                if (!(functionName in this.methodWarnings)) {
+                    console.error(`Expected function on '${functionName}' in script ${this.name}`);
+                    this.methodWarnings[functionName] = true;
+                }
                 return;
             }
 
-            method.__call__({context: global}, ...args);
+            method.__call__({context: globalESContext}, ...args);
+
         } else if (this.script) {
             const func: any = this.script[functionName];
 

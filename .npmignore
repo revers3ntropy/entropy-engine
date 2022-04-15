@@ -1,8 +1,11 @@
-build.js
-webpack.log
-.gitattributes
-webpack.config.js
-/test/
 /.idea/
-/src/
+.gitattributes
+.gitignore
+
+build.js
+webpack.config.js
+webpack.log
 webpack-log.txt
+
+/test/
+/src/

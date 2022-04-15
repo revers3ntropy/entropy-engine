@@ -598,6 +598,7 @@ declare module 'entropy-engine' {
     }
 
     function entitiesFromJSON (JSON: any): void;
+    function scriptFromURL (url: string): Promise<Script | void>;
 
     abstract class Collider extends Component {
         offset: v2;

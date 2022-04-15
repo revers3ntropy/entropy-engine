@@ -1,6 +1,6 @@
 {
     "name": "entropy-engine",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "TypeScript Game Engine",
     "main": "index.js",
     "repository": {
@@ -19,7 +19,7 @@
     "homepage": "https://entropyengine.dev",
     "dependencies": {
         "@types/matter-js": "^0.17.7",
-        "entropy-script": "^2.8.6",
+        "entropy-script": "^3.0.4",
         "matter-js": "^0.18.0",
         "ts-loader": "^9.2.6",
         "webpack": "^5.69.1",
