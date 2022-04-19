@@ -20,12 +20,12 @@
     "dependencies": {
         "@types/matter-js": "^0.17.7",
         "entropy-script": "^3.0.4",
-        "matter-js": "^0.18.0",
+        "matter-js": "^0.18.0"
+    },
+    "devDependencies": {
+        "@types/resize-observer-browser": "^0.1.7",
         "ts-loader": "^9.2.6",
         "webpack": "^5.69.1",
         "webpack-cli": "^4.9.2"
-    },
-    "devDependencies": {
-        "@types/resize-observer-browser": "^0.1.7"
     }
 }
