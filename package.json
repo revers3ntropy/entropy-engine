@@ -1,31 +1,43 @@
 {
     "name": "entropy-engine",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "description": "TypeScript Game Engine",
     "main": "index.js",
+    "types": "index.d.ts",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/revers3ntropy/entropy-engine.git"
+        "url": "git+https://github.com/Entropy-Games/entropy-engine.git"
     },
     "keywords": [
         "typescript",
         "game engine",
         "web"
     ],
-    "author": "revers3ntropy",
+    "author": {
+        "name": "revers3ntropy",
+        "url": "https://revers3ntropy.com"
+    },
     "bugs": {
-        "url": "https://github.com/revers3ntropy/entropy-engine/issues"
+        "url": "https://github.com/Entropy-Games/entropy-engine/issues"
     },
-    "homepage": "https://entropyengine.dev",
-    "dependencies": {
-        "@types/matter-js": "^0.17.7",
-        "entropy-script": "^3.0.4",
-        "matter-js": "^0.18.0"
-    },
+    "homepage": "https://entropygames.io/entropy-engine",
     "devDependencies": {
+        "@types/matter-js": "^0.17.7",
         "@types/resize-observer-browser": "^0.1.7",
-        "ts-loader": "^9.2.6",
+        "entropy-script": "^3.0.8",
+        "matter-js": "^0.18.0",
+        "ts-loader": "^9.3.1",
         "webpack": "^5.69.1",
         "webpack-cli": "^4.9.2"
+    },
+    "files": [
+        "build/latest.js",
+        "build/stable.js",
+        "index.js"
+    ],
+    "scripts": {
+        "build": "webpack",
+        "build:all": "node --enable-source-maps build; npm run build:types",
+        "build:types": "dts-bundle --baseDir . --name entropy-engine --main src/index.d.ts --out ./index.d.ts; scripts/delete-declarations"
     }
 }

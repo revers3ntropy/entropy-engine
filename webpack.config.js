@@ -11,8 +11,8 @@ module.exports = {
 			{
 				test: /\.ts$/,
 				use: 'ts-loader'
-			},
-		],
+			}
+		]
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],
@@ -20,7 +20,9 @@ module.exports = {
 	output: {
 		filename: version + '.js',
 		path: path.resolve(__dirname, 'build'),
-		library: 'ee'
+		library: 'es',
+		libraryTarget: 'umd',
+		globalObject: 'this || window'
 	},
 	mode: 'production',
 	devtool: 'source-map',

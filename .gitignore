@@ -1,5 +1,7 @@
-/package-lock.json
-/.idea/
-/node_modules/
-/webpack.log
-webpack-log.txt
+package-lock.json
+.idea
+node_modules
+webpack.log
+*.txt
+*.js.map
+/build/

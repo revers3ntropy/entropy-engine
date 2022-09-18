@@ -28,7 +28,7 @@ export async function init () {
 
     let globalCTX = await es.init({
         print: console.log,
-        input: () => {},
+        input: (msg, cb) => cb(es.wrap(prompt(es.str(msg)))),
         libs: {
             ee: [{
                 CircleCollider,

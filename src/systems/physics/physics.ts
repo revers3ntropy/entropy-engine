@@ -6,7 +6,7 @@ import {v3} from "../../maths/v3";
 import {Script} from "../../components/scriptComponent";
 
 import * as Matter from 'matter-js';
-import {ESJSBinding} from 'entropy-script';
+import { ESJSBinding } from 'entropy-script';
 
 Systems.systems.push({
     name: 'Physics',

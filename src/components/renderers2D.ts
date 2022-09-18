@@ -15,7 +15,7 @@ type drawArgs = {
 };
 
 export abstract class Renderer2D extends Renderer {
-    abstract draw (arg: drawArgs): void;
+    abstract override draw (arg: drawArgs): void;
 
     offset: v2 = v2.zero;
     
@@ -30,9 +30,9 @@ export abstract class Renderer2D extends Renderer {
         });
     }
 
-    Update () {}
+    override Update () {}
 
-    json () {
+    override json () {
         return JSONifyComponent(this);
     }
 }
